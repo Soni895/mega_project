@@ -40,7 +40,7 @@ const UserSchema=new mongoose.Schema(
             {
                 type:mongoose.Schema.Types.ObjectId,
                 required:true,
-                ref:"Profile",
+                ref:"Courses",
             }
         ],
         Image:
