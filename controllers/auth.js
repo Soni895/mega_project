@@ -10,6 +10,7 @@ const bcrypt=require("bcrypt");
 const Profile=require("../models/profile");
 require("dotenv").config();
 const jwt= require("jsonwebtoken");
+const user = require("../models/user");
 
 exports.SendOtp=async(req, res)=>
 {
@@ -313,4 +314,17 @@ exports.Login= async (req,res)=>
             }
         )
     }
+}
+
+// todo homework
+exports.ChangePassword= async (req,res)=>
+{
+    // get data from user
+    // old password new password
+    // confirm new password
+    // validation 
+    // update password in database
+    // send mail update password
+    // return response
+
 }
