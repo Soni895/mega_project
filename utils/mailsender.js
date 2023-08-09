@@ -33,4 +33,4 @@ const MailSender= async (mail,title,body)=>
      }
 }
 
-module.exports=nodemailer;
+module.exports=MailSender;
