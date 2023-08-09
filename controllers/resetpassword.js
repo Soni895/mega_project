@@ -5,7 +5,7 @@ const  MailSender=require("../utils/mailsender");
 const bcrypt=require("bcrypt");
 
 
-exports.MailSender= async (req,res)=>
+exports.ResetPasswordToken= async (req,res)=>
 {
 try {
      // steps
