@@ -273,7 +273,7 @@ exports.Login= async (req,res)=>
               {
                   Email:user.Email,
                   id:user._id,
-                  Role:user.Role
+                  Role:user.AccountType
   
               }
               const jwt_secret=process.env.jwt_secret;
