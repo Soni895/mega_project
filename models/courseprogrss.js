@@ -9,11 +9,13 @@ const CourseProgressSchema=new mongoose.Schema(
 
         },
         CompletedVideo:
+        [
         {
             type:mongoose.Schema.Types.ObjectId,
             ref:"SubSection",
 
         },
+    ]
         
 
     }
