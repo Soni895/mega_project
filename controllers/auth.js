@@ -8,6 +8,8 @@ const otpGenerator = require('otp-generator');
 const uniqid = require('uniqid');
 const bcrypt=require("bcrypt");
 const Profile=require("../models/profile");
+require("dotenv").config();
+const jwt= require("jsonwebtoken");
 
 exports.SendOtp=async(req, res)=>
 {
@@ -211,10 +213,6 @@ console.log( AccountType,
  
                 }
             )
-
-
-
-
         
     } catch (error) {
         return res.status(500).json(
@@ -227,4 +225,92 @@ console.log( AccountType,
         
     }
     
+}
+
+exports.Login= async (req,res)=>
+{
+// get data form req
+// validation
+// user check exists
+// password match
+// generate jwt token
+// create cookee
+
+    try {
+        const {Email,Password}=req.body;
+
+        if(!Email||!Password)
+        {
+            return res.status(500).json(
+            {
+                    status:"unsuccessful",
+                    success:false,
+                    error:"Empty field please fill all required field",
+                }); 
+            }
+            let user = await User.findOne({Email}).populate("AdditionalDetails");
+            if(!user)
+            {
+                return res.status(500).json(
+                        {
+                            status:"unsuccessful",
+                            success:false,
+                            error:"user  not found",
+                        });
+              }
+              const ismatch= await bcrypt.compare(Password,user.Password);
+              if(!ismatch)
+              {
+                 return  res.status(500).json(
+                      {
+                          status:"unsuccessful",
+                          success:false,
+                          error:"password not match",
+                      }); 
+              }
+              const payload=
+              {
+                  Email:user.Email,
+                  id:user._id,
+                  Role:user.Role
+  
+              }
+              const jwt_secret=process.env.jwt_secret;
+              let token=jwt.sign(payload,jwt_secret,
+                {
+                    expiresIn:"2h",
+                });
+
+                // response=response.toObject();
+                response.Token=token;
+                console.log(response.Token);
+                response.Password=undefined;
+
+                const options={
+                    expires:new Date( Date.now()+3*24*60*60*1000),
+                   httpOnly:true,
+
+                }
+                res.cookie("Token",token,options).status(200).json(
+                    {
+                        status:"successful",
+                        token,
+                        user,
+                        message:"successful login",
+                        Email,
+                        Password,
+
+                    });
+
+
+        
+    } catch (error) {
+        return res.status(500).json(
+            {
+                status:false,
+                message:"try again",
+                  error,
+            }
+        )
+    }
 }
