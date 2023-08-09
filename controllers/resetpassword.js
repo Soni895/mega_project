@@ -1,9 +1,11 @@
-const { exists } = require("../models/courseprogrss");
+
+const { findOneAndUpdate } = require("../models/courseprogrss");
 const User=require("../models/user");
 const  MailSender=require("../utils/mailsender");
+const bcrypt=require("bcrypt");
 
 
-exports.ResetPassword= async (req,res)=>
+exports.MailSender= async (req,res)=>
 {
 try {
      // steps
@@ -52,5 +54,77 @@ try {
         }
     )
 }
+}
 
+exports.ResetPAssword=async (req,res)=>
+{
+   try {
+     //token
+    // password
+    // confirmpassword
+    // get user detais
+    // if entry not found ->invalid token
+    // check expires time 
+    // hash password 
+    // update password
+    const   {Token,Password,ConfirmPassword}=req.body;
+    if(Password!==ConfirmPassword)
+    {
+      return res.status(500).json(
+        {
+            status:false,
+            message:"password not match",
+            
+        }
+      );
+    }
+    const UserDetails=await User.findOne({Token});
+    if(!UserDetails)
+    
+    {
+        return res.status(500).json(
+            {
+                status:false,
+                message:"password not match",
+                
+            }
+          );
+    }
+    if(UserDetails.ResetPasswordExpires>Date.now())
+    {
+        return res.status(500).json(
+            {
+                status:false,
+                message:"token is expire please regenertae password",
+            }
+          )
+    }
+
+
+    const hashedpassword= await bcrypt.hash(Password,10);
+
+    const resposne= await findOneAndUpdate({Token},
+        {Password:hashedpassword},
+        {new:true})
+
+        return res.status(200).json(
+            
+            {
+                staus:true,
+                message:"password reset successfull",
+                resposne,
+
+            }
+        );
+    
+   } catch (error) {
+    return res.status(500).json(
+        {
+            status:false,
+            message:"password resset un successful please try again",
+            error,
+        }
+    )
+    
+   }
 }
