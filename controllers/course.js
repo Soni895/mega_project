@@ -89,6 +89,20 @@ return res.status(200).json({
     status:successfull,
     message:"course created successful",
     success:true,
+    response,
+    NewCourse,
+    ThumbnailImg,
+    CourseName,
+    CourseDescription,
+    Price,
+    Tag,
+    WhatYouWillLearn,
+    Thumbnail,
+    UserId,
+    InstructorDetails,
+    TagDetailes
+
+
 })
 
 
