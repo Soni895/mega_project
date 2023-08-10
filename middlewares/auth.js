@@ -26,7 +26,7 @@ const {Token}=req.body||req.cookies ||
 //  verify token
 try {
     const payload=jwt.verify(Token,jwt_secret);
-    req.user=payload;
+    req.User=payload;
     
 } catch (error) {
     return res.status(500).json(
@@ -53,7 +53,7 @@ exports.IsStudent=(req,res,next)=>
 {
     try {
     
-        if(req.user.AccountType!=="Student")
+        if(req.User.AccountType!=="Student")
         {
                 return res.status(500).json(
                     {
@@ -80,7 +80,7 @@ exports.IsStudent=(req,res,next)=>
 exports.Instructor=(req,res,next)=>
 {
     try {
-        if(req.user.Role!=="Instructor")
+        if(req.User.Role!=="Instructor")
         {
             return res.status(500).json(
                 {
@@ -108,7 +108,7 @@ exports.Instructor=(req,res,next)=>
 exports.isAdmin=(req,res,next)=>
 {
     try {
-        if(req.user.Role!=="Admin")
+        if(req.User.Role!=="Admin")
         {
             return res.status(500).json(
                 {
