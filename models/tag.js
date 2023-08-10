@@ -15,13 +15,14 @@ const TagSchema=new mongoose.Schema(
              
         },
    
-      Course:
+      Course:[
       {
         type:mongoose.Schema.Types.ObjectId,
             required:true,
             ref:"Course", 
 
       }
+    ],
     }
 );
 const Tag=mongoose.model("Tag",TagSchema);

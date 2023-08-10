@@ -403,9 +403,7 @@ exports.ChangePassword= async (req,res)=>
                 payload,
                 Token
             }
-        );
-
-        
+        );   
     }
  
     
