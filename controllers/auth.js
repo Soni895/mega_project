@@ -12,22 +12,25 @@ const user = require("../models/user");
 
 exports.SendOtp=async(req, res)=>
 {
+
     try {
     // fetch emial
     const {Email}=req.body;
 
     // check if user already exist
+
     const isprestent=await User.findOne({Email});
     console.log(isprestent);
     if(isprestent)
     {
-        return res.status(401).json(
+         return res.status(401).json(
             {
                 status:false,
                 message:"user exists",
             }
         )
     }
+
     // generate otp
     const uniqueId = uniqid();
     let otp = otpGenerator.generate(6, { digits: true })+uniqueId;
@@ -280,10 +283,10 @@ exports.Login= async (req,res)=>
                     expiresIn:"2h",
                 });
 
-                // response=response.toObject();
-                response.Token=token;
-                console.log(response.Token);
-                response.Password=undefined;
+                // user=user.toObject();
+                user.Token=token;
+                console.log(user.Token);
+                user.Password=undefined;
 
                 const options={
                     expires:new Date( Date.now()+3*24*60*60*1000),
@@ -317,12 +320,118 @@ exports.Login= async (req,res)=>
 // todo homework
 exports.ChangePassword= async (req,res)=>
 {
-    // get data from user
+    try {
+        // get data from user
     // old password new password
     // confirm new password
     // validation 
     // update password in database
     // send mail update password
     // return response
+    const {OldPassword,NewPassword,ConfirmNewPassword}=req.body;
+    const {Token}=req.body||req.cookies ||
+ req.header("Authorization").replace("Bearer ","");
+
+ if(!Token)
+ {
+     return res.status(500).json(
+         {
+             status:"unsuccessful",
+             success:false,
+             error:" token not found",
+         });
+ }
+
+
+    const payload=jwt.verify(Token,process.env.jwt_secret);
+    if(!payload)
+    {
+        return res.status(500).json(
+            {
+                status:"unsuccessful",
+                success:false,
+                error:" paylaod not found",
+            });
+    }
+    const _id=payload.id;
+    const response =await User.findById(_id);
+    if(!response){
+        return res.status(500).json(
+            {
+                status:"unsuccessful",
+                success:false,
+                error:" User not found",
+            });
+
+    }
+    const ismatch=bcrypt.compare(OldPassword,response.Password);
+    if(!ismatch)
+    {
+       return  res.status(500).json(
+            {
+                status:"unsuccessful",
+                success:false,
+                error:"password not match",
+            }); 
+    }
+
+    if(ConfirmNewPassword!==NewPassword)
+    {
+        return res.status(500).json(
+            {
+                status:"unsuccessful",
+                success:false,
+                error:" Password and confirm Password not Match",
+            });
+
+    };
+    let hashedpassword;
+    try{
+        hashedpassword= await bcrypt.hash(NewPassword,10);
+        const updated_data=await User.findByIdAndUpdate(_id,{
+            Password:hashedpassword,
+        },{ new: true });
+
+        return res.status(200).json(
+            {
+                Status:true,
+                message:"Password change successfull",
+                response,
+                hashedpassword,
+                NewPassword,OldPassword,Password,
+                ismatch,
+                payload,
+                Token
+            }
+        );
+
+        
+    }
+ 
+    
+   catch(error)
+    {
+        return res.status(400).json(
+            {
+                status:"error in hasing password",
+                success:false,
+
+            }
+        )
+    }
+    
+        
+    } catch (error) {
+        return res.status(500).json(
+            {
+                status:"unsuccessful",
+                success:false,
+                error:" password change unsuccessful",
+            });
+        
+    }
+
+
+
 
 }

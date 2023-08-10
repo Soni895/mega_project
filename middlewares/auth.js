@@ -27,8 +27,6 @@ const {Token}=req.body||req.cookies ||
 try {
     const payload=jwt.verify(Token,jwt_secret);
     req.user=payload;
-
-
     
 } catch (error) {
     return res.status(500).json(
