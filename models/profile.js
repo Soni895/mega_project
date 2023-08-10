@@ -2,7 +2,6 @@ const mongoose=require("mongoose");
 const ProfileSchema=new mongoose.Schema(
     {
         Gender:
-
         {
             type:String,
 
@@ -23,7 +22,6 @@ const ProfileSchema=new mongoose.Schema(
             trim:true,
 
         }
-
     }
 );
 const Profile=mongoose.model("Profile",ProfileSchema);

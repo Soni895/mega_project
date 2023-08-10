@@ -25,24 +25,26 @@ const OtpSchema=new mongoose.Schema(
 
 // a function to send mail
 
-async function SendOtp(email,otp)
+async function SendOtp(Email,Otp)
 {
     try {
         const title= "verification code";
         
       
-        const response= await MailSender(email,title,otp);
+        const response= await MailSender(Email,title,Otp);
         console.log(response);
+        return response;
     } catch (error) {
         console.log("error while sending mail",error);
-        throw error;
+        // throw error;
         
     }
 };
 OtpSchema.pre("save",async(next)=>
 {
-   await  SendOtp(this.email,this.otp);
-   next();
+ const  response=  await SendOtp(this.email,this.otp);
+ console.log(response);
+ next();
 })
 
 const Otp=mongoose.model("Otp", OtpSchema);

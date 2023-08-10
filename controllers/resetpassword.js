@@ -1,9 +1,6 @@
-
-const { findOneAndUpdate } = require("../models/courseprogrss");
 const User=require("../models/user");
 const  MailSender=require("../utils/mailsender");
 const bcrypt=require("bcrypt");
-
 
 exports.ResetPasswordToken= async (req,res)=>
 {
@@ -18,7 +15,7 @@ try {
     // send mail containing url
 
     const {Email}=req.body;
-    const user=await User.findOne({email});
+    const user=await User.findOne({Email});
     if(!user)
     {
     return res.status(401).json(
@@ -28,8 +25,7 @@ try {
         });
     }
     const Token= crypto.randomUUID();
-    const updated_deatils=await User.findOneAndUpdate
-    ({Email},
+    const Updated_Deatils=await User.findOneAndUpdate({Email},
         {
             Token,ResetPasswordExpires:Date.now()+5*1000*60,
         },{new:true});
@@ -40,10 +36,12 @@ try {
         {
             status:true,
             message:"reste password link send successful",
-            
+            Updated_Deatils,
+            Token,
+            resposne,
+            url, 
         }
-    )
-    
+    );
 } catch (error) {
     res.status(500).json(
         
@@ -67,7 +65,7 @@ exports.ResetPAssword=async (req,res)=>
     // check expires time 
     // hash password 
     // update password
-    const   {Token,Password,ConfirmPassword}=req.body;
+    const {Token,Password,ConfirmPassword}=req.body;
     if(Password!==ConfirmPassword)
     {
       return res.status(500).json(
@@ -86,7 +84,6 @@ exports.ResetPAssword=async (req,res)=>
             {
                 status:false,
                 message:"password not match",
-                
             }
           );
     }
@@ -100,10 +97,9 @@ exports.ResetPAssword=async (req,res)=>
           )
     }
 
-
     const hashedpassword= await bcrypt.hash(Password,10);
 
-    const resposne= await findOneAndUpdate({Token},
+    const resposne= await User.findOneAndUpdate({Token},
         {Password:hashedpassword},
         {new:true})
 

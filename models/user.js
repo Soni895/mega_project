@@ -66,7 +66,17 @@ const UserSchema=new mongoose.Schema(
         {
             type:Date,
 
-        }
+        },
+        Password:
+        {
+            type:String,
+            required:true,
+        },
+        ConfirmPassword:
+        {
+            type:String,
+            required:true,
+        },
 
     }
 );

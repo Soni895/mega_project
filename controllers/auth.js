@@ -1,7 +1,5 @@
 // Otp,signup,login
 // change password
-
-
 const User=require("../models/user");
 const Otp=require("../models/otp");
 const otpGenerator = require('otp-generator');
