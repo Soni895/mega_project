@@ -32,6 +32,9 @@ if(!CourseName||!WhatYouWillLearn||!Tag||!Price||!CourseDescription||!Thumbnail)
 // check is instructor
 const UserId= req.User.id;
 const InstructorDetails=await User.findById(UserId);
+
+// verify that serid and instrctor id is same or not ??????????????
+
 console.log(InstructorDetails);
 if(!InstructorDetails)
 {
@@ -83,6 +86,13 @@ const response= await User.findByIdAndUpdate({_id:InstructorDetails._id},{
 },{new:true}
 )  .populate("courses")
 .exec(); 
+
+
+
+
+// update tag schema todo hmeword
+
+
 
 return res.status(200).json({
 
