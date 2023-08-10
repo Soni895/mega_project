@@ -104,10 +104,8 @@ return res.status(200).json({
 
 
 })
-
-
     } catch (error) {
-        return res.status(401).json(
+        return res.status(500).json(
             {
                 status:"Unsuccessful",
                 success:false,
@@ -119,4 +117,39 @@ return res.status(200).json({
     }
 
 
+}
+
+// get all courses`
+
+exports.GetAllCourses= async(req,res)=>
+{
+    try {
+        
+
+        const AllCourse= await Course.find({},{CourseName:true,Price:true,Thumbnail:true,Instructor:true,
+        RatingAndREview:true,StudentEnrolled:true}).populate("Instructor").exec();
+       
+        
+            return res.status(200).json(
+                {
+                    status:"Successful",
+                    success:true,
+                    message:"All courses find successful",
+                    AllCourses
+                }
+            );
+
+
+    } catch (error) {
+        return res.status(500).json(
+            {
+                status:"Unsuccessful",
+                success:false,
+                message:"course not created please try again",
+                error,
+            }
+        );
+        
+        
+    }
 }
