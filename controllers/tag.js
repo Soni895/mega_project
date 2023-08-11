@@ -5,7 +5,7 @@ exports.CreateTag=async (req,res)=>
 {
     try {
         const {Name,Description}=req.body;
-          if(!Name||Description)
+          if(!Name||!Description)
           {
             return res.status(500).json(
                 {

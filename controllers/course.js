@@ -1,6 +1,5 @@
-const { Instructor } = require("../middlewares/auth");
-const  Course= require("../models/course");
-const Tag=require("../models/tag");
+const Course= require("../models/course");
+const tag=require("../models/tag");
 const User=require("../models/user");
 const {ImageUploadToCloudinary}=require("../utils/mailsender");
  
@@ -15,7 +14,7 @@ exports.CreateCourse=async(req,res)=>
         // File
         // validation
         // tag
-        const {CourseName,CourseDescription,Price,Tag,WhatYouWillLearn}=req.body;
+  const {CourseName,CourseDescription,Price,Tag,WhatYouWillLearn}=req.body;
 const Thumbnail=req.files.Thumbnail;
 
 //validation
@@ -88,9 +87,16 @@ const response= await User.findByIdAndUpdate({_id:InstructorDetails._id},{
 .exec(); 
 
 
+// update tag schema todo.
+const Updated_tag= await User.findByIdAndUpdate(Tag,{
+    $push:
+    {
+        Course:NewCourse._id,
+    }
+},{new:true}
+)  .populate("Tag")
+.exec(); 
 
-
-// update tag schema todo hmeword
 
 
 
@@ -110,7 +116,8 @@ return res.status(200).json({
     Thumbnail,
     UserId,
     InstructorDetails,
-    TagDetailes
+    TagDetailes,
+    Updated_tag
 
 
 })
