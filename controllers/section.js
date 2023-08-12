@@ -115,3 +115,49 @@ exports.UpdateSection=async (req,res)=>
     }
 
 }
+
+exports.DeleteSection=async (req,res)=>
+{
+    try {
+        // fetech data
+        // data validation
+        // delete section
+        // return response
+
+        const {SectionId}=req.params;
+        if(!SectionId)
+        {
+        return res.status(401).json(
+            {
+                Success:false,
+                status:"unsuccessful",
+                message:"unable to  Update section",
+            }
+        ) 
+        }
+        const response= await Section.findByIdAndDelete(SectionId);
+
+        // const updated_Course= await Course.findByIdAndUpdate(
+        //     post_id,{$pull:{comment:deleted_comment._id}},{new :true,} 
+        //     );
+        return res.status(200).json(
+            {
+                status:"successful",
+                message:"Section Deleted Successful",
+                response, 
+            }
+        );
+        
+    } catch (error) {
+        return res.status(401).json(
+            {
+                Success:false,
+                status:"unsuccessful",
+                message:"unable to  Delete section",
+                error,
+            }
+        ) 
+        
+
+    }
+}
