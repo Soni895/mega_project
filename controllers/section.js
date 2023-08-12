@@ -3,7 +3,7 @@ const Section=require("../models/section");
 
 
 exports.CreateSection= async (req,res)=>
-{
+{ 
  try {
        // 1. fetch data
     //    validation
@@ -50,7 +50,7 @@ exports.CreateSection= async (req,res)=>
         {
             Success:false,
             status:"unsuccessful",
-            message:"fill all the required filed",
+            message:"unable to Create section",
             error,
 
         }
@@ -60,5 +60,58 @@ exports.CreateSection= async (req,res)=>
 
 exports.UpdateSection=async (req,res)=>
 {
+    try {
+        // fetech data
+        // data validation
+        // update data
+        // return response
+
+        const {SectionName,SectionId}=req.body;
+        if(!SectionName||!SectionId)
+        {
+            return res.status(401).json(
+                {
+                    Success:false,
+                    status:"unsuccessful",
+                    message:"fill all the required filed",
+    
+                }
+            )
+
+        };
+
+        const Upadted_Section= await Section.findByIdAndUpdate(SectionId,
+            {
+                SectionName
+            },
+            {new:true} );
+
+            return res.status(200).json(
+                {
+                    status:"successful",
+                    message:"Section Updated Successful",
+                    Upadted_Section,
+                    SectionId,
+                }
+            );
+            
+
+
+
+
+
+        
+    } catch (error) {
+        return res.status(401).json(
+            {
+                Success:false,
+                status:"unsuccessful",
+                message:"unable to  Update section",
+                error,
+    
+            }
+        )
+        
+    }
 
 }
