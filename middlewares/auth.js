@@ -80,7 +80,7 @@ exports.IsStudent=(req,res,next)=>
 exports.Instructor=(req,res,next)=>
 {
     try {
-        if(req.User.Role!=="Instructor")
+        if(req.User.AccountType!=="Instructor")
         {
             return res.status(500).json(
                 {
@@ -108,7 +108,7 @@ exports.Instructor=(req,res,next)=>
 exports.isAdmin=(req,res,next)=>
 {
     try {
-        if(req.User.Role!=="Admin")
+        if(req.User.AccountType!=="Admin")
         {
             return res.status(500).json(
                 {
