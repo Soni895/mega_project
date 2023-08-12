@@ -1,7 +1,7 @@
 const Course= require("../models/course");
 const tag=require("../models/tag");
 const User=require("../models/user");
-const {ImageUploadToCloudinary}=require("../utils/mailsender");
+const {ImageUploadToCloudinary}=require("../utils/imageuploader");
  
 // craete Course
 // get all caurse

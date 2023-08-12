@@ -137,6 +137,8 @@ exports.DeleteSection=async (req,res)=>
         }
         const response= await Section.findByIdAndDelete(SectionId);
 
+        // delete section from course mdoel
+    
         // const updated_Course= await Course.findByIdAndUpdate(
         //     post_id,{$pull:{comment:deleted_comment._id}},{new :true,} 
         //     );
