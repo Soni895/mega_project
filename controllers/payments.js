@@ -3,6 +3,7 @@ const {instance}=require("../config/razorpay");
 const Course= require("../models/course");
 const User= require("../models/user");
 const {MailSender}=require("../utils/mailsender");
+const crypto = require('crypto');
 
 // import template for email sender
 // after integrate template
@@ -21,9 +22,9 @@ exports.CapturePayment=async (req,res)=>
     // user alraedy pay for that
     //order craete
     // return response
-    const {CourseId}=req.body;
+    const {Course_Id}=req.body;
     const UserId=req.User.id;
-    if(!CourseId)
+    if(!Course_Id)
     {
         return res.status(401).json({
             success:false,
@@ -67,7 +68,7 @@ const Option={
     receipt:Math.random().toString(),
     notes:
     {
-        CourseId,
+        Course_Id,
         User_id,
         course
 
@@ -91,7 +92,7 @@ console.log(PaymentResponse);
 // return response
 return res.status(200).json(
     {
-        status:success,
+        status:"successful",
         success:true,
         message:"order craeted successfully",
         PaymentResponse,
@@ -115,4 +116,103 @@ return res.status(200).json(
         )
     }
 
+}
+// verify signature of razor pay server
+exports.VerifySignature= async (req,res)=>
+{
+    try {
+        const payload = JSON.stringify(req.body);
+        const webhookSecret = 'Amazon@45';
+        const expectedSignature = req.headers['x-razorpay-signature'];
+         const hmac = crypto.createHmac('sha256', webhookSecret);
+         hmac.update(payload);
+         const digest=hmac.dige("hex");
+
+         if(expectedSignature===digest){
+            console.log('Webhook signature verified');
+
+            const {Course_Id,User_id}=req.body.payload.payment.entity.notes;
+
+            try {
+                // find the student and enroll it
+                const Updated_User= await User.findByIdAndUpdate(User_id,
+                    {
+                        $push:{
+                            Courses:Course_Id,
+                        }
+                    },{new:true});
+
+                    if(!Updated_User)
+                    {
+                         return res.status(404).json({status:"unsuccessful",
+                           success:false,
+                         message:"user not update",
+
+                    });
+                }
+
+                  
+                // find the course and upade
+ const Updated_Course= await Course.findByIdAndUpdate(Course_Id,
+    {
+        $push:{StudentEnrolled:User_id,}
+
+    },{new:true})
+                
+            } catch (error) {
+                res.status(400).json(
+                    {
+                        status:"unsuccessful",
+                        success:false,
+                        message:"Invalid webhook signature",
+    
+    
+                    }
+                );
+                
+            }
+            if(!Updated_Course)
+                    {
+                         return res.status(404).json({status:"unsuccessful",
+                           success:false,
+                         message:"Courser not update",
+
+                    });
+                }
+
+
+                // mail send 
+
+                const email_response= await MailSender(Updated_User.Email,"congratulation",
+                "payment successful congrtulation to our family");
+            res.status(200).json(
+                {
+                    status:"successful",
+                    success:true,
+                    message:"user and course not update",
+                    Updated_User,
+                    Updated_Course,
+                    email_response
+
+                }
+            );
+         }
+         else
+         {
+            console.log('Invalid webhook signature');
+            res.status(400).json(
+                {
+                    status:"unsuccessful",
+                    success:false,
+                    message:"Invalid webhook signature",
+
+
+                }
+            );
+         }
+
+        
+    } catch (error) {
+        
+    }
 }
