@@ -29,7 +29,7 @@ exports.UpdateProfile= async(req,res)=>
             );
         };
 
-        const UserDetailes= await user.findById(id);
+        const UserDetailes= await User.findById(id);
         cosnole.log(UserDetailes);
         const ProfileId= UserDetailes.AdditionalDetails;
          const ProfileDetailes= await Profile.findById(ProfileId);
