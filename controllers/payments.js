@@ -16,7 +16,7 @@ exports.CapturePayment=async (req,res)=>
 {
     try {
         // get course in and userid
-    // validation
+     // validation
     // is valid course id 
     // is valid user id
     // user alraedy pay for that
@@ -77,7 +77,7 @@ const Option={
 
 // function call order create
 try {
-    const PaymentResponse= await  instance.orders.create(Option);
+    const PaymentResponse= await instance.orders.create(Option);
 console.log(PaymentResponse);
 } catch (error) {
     return res.status(401).json({
@@ -152,7 +152,7 @@ exports.VerifySignature= async (req,res)=>
                 }
 
                   
-                // find the course and upade
+         // find the course and upade
  const Updated_Course= await Course.findByIdAndUpdate(Course_Id,
     {
         $push:{StudentEnrolled:User_id,}
@@ -213,6 +213,15 @@ exports.VerifySignature= async (req,res)=>
 
         
     } catch (error) {
-        
+        res.status(400).json(
+            {
+                status:"unsuccessful",
+                success:false,
+                message:"payment failed",
+                error,
+
+            }
+        );
+
     }
 }

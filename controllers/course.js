@@ -1,5 +1,5 @@
 const Course= require("../models/course");
-const tag=require("../models/tag");
+const Tag = require("../models/tag");
 const User=require("../models/user");
 const {ImageUploadToCloudinary}=require("../utils/imageuploader");
  
@@ -77,7 +77,7 @@ const NewCourse= await Course.create(
     }
     )
 // add the new course of user schema of instructor
-const response= await User.findByIdAndUpdate({_id:InstructorDetails._id},{
+const Updated_Course= await User.findByIdAndUpdate({_id:InstructorDetails._id},{
     $push:
     {
         Courses:NewCourse._id,
@@ -88,7 +88,7 @@ const response= await User.findByIdAndUpdate({_id:InstructorDetails._id},{
 
 
 // update tag schema todo.
-const Updated_tag= await User.findByIdAndUpdate(Tag,{
+const Updated_tag= await Tag.findByIdAndUpdate(Tag,{
     $push:
     {
         Course:NewCourse._id,
@@ -105,7 +105,7 @@ return res.status(200).json({
     status:successfull,
     message:"course created successful",
     success:true,
-    response,
+    Updated_Course,
     NewCourse,
     ThumbnailImg,
     CourseName,
@@ -118,8 +118,6 @@ return res.status(200).json({
     InstructorDetails,
     TagDetailes,
     Updated_tag
-
-
 })
     } catch (error) {
         return res.status(500).json(
@@ -136,7 +134,7 @@ return res.status(200).json({
 
 }
 
-// get all courses`
+// get all courses
 
 exports.GetAllCourses= async(req,res)=>
 {
@@ -152,11 +150,9 @@ exports.GetAllCourses= async(req,res)=>
                     status:"Successful",
                     success:true,
                     message:"All courses find successful",
-                    AllCourses
+                    AllCourse,
                 }
             );
-
-
     } catch (error) {
         return res.status(500).json(
             {

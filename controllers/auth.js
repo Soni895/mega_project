@@ -2,17 +2,15 @@
 // change password
 const User=require("../models/user");
 const Otp=require("../models/otp");
+const Profile=require("../models/profile");
 const otpGenerator = require('otp-generator');
 const uniqid = require('uniqid');
 const bcrypt=require("bcrypt");
-const Profile=require("../models/profile");
 require("dotenv").config();
 const jwt= require("jsonwebtoken");
-const user = require("../models/user");
 
-exports.SendOtp=async(req, res)=>
+exports.SendOtp=async(req,res)=>
 {
-
     try {
     // fetch emial
     const {Email}=req.body;
@@ -189,7 +187,7 @@ console.log( AccountType,
                 About:null,
                 DateOfBirth:null,
                 Gender:null
-            })
+            });
             const Payload= new User(
                 {
                     AccountType,

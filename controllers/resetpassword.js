@@ -31,7 +31,7 @@ try {
         },{new:true});
 
     const url=`http://localhost:3000/Update-Password/${Token}`;
-    const resposne= await MailSender(Email,"passwordreset",url);
+    const resposne= await MailSender(Email,"PasswordReset",url);
     return res.status(200).json(
         {
             status:true,
@@ -83,7 +83,7 @@ exports.ResetPAssword=async (req,res)=>
         return res.status(500).json(
             {
                 status:false,
-                message:"password not match",
+                message:"User not found",
             }
           );
     }

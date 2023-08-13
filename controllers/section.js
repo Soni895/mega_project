@@ -7,9 +7,9 @@ exports.CreateSection= async (req,res)=>
  try {
        // 1. fetch data
     //    validation
-    //    section craete
-    //    upadte in 
-    // return response
+    //    section create
+    //    upadte in  course
+    //    return response
     const {SectionName,CourseId}=req.body;
     if(!SectionName||!CourseId)
     {
@@ -28,11 +28,15 @@ exports.CreateSection= async (req,res)=>
     const Updated_Course= await  Course.findByIdAndUpdate(CourseId,{
 
         $push:{CourseContent:NewSection._id}
-       
-    }, {new:true});
+    }, {new:true}).populate({
+        path: 'Section',
+        populate:{
+            path: 'Subsection'
+        }
 
+    }).exec();
 
-//    add section and sub section  object print populate data visible  home work 
+//    add section and sub section  object print populate data visible  home work   **** done******
 
     return res.status(200).json(
         {
@@ -95,12 +99,6 @@ exports.UpdateSection=async (req,res)=>
                 }
             );
             
-
-
-
-
-
-        
     } catch (error) {
         return res.status(401).json(
             {
@@ -137,11 +135,18 @@ exports.DeleteSection=async (req,res)=>
         }
         const response= await Section.findByIdAndDelete(SectionId);
 
-        // delete section from course mdoel
+          
+        
+        // delete section from course mdoel   **************hw done*********
     
-        // const updated_Course= await Course.findByIdAndUpdate(
-        //     post_id,{$pull:{comment:deleted_comment._id}},{new :true,} 
-        //     );
+        Updated_Course= await Course.findByIdAndUpdate(response._id,
+            {
+                $pull:{
+                    CourseContent: SectionId,
+
+                }
+            },{new:true});
+
         return res.status(200).json(
             {
                 status:"successful",
@@ -160,6 +165,5 @@ exports.DeleteSection=async (req,res)=>
             }
         ) 
         
-
     }
 }

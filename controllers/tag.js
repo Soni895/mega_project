@@ -1,6 +1,4 @@
 const Tag = require("../models/tag");
-const tag= require("../models/tag");
-
 exports.CreateTag=async (req,res)=>
 {
     try {

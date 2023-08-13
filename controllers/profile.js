@@ -1,8 +1,8 @@
 const User= require("../models/user");
-const profile= require("../models/profile");
-const Profile = require("../models/profile");
+const Profile= require("../models/profile");
+const cron = require('node-cron');
 
-//   update deelete
+//   update delete
 
 exports.UpdateProfile= async(req,res)=>
 {
@@ -16,8 +16,8 @@ exports.UpdateProfile= async(req,res)=>
         //return respose
 
         const {ContactNumber,DateOfBirth="",Gender,About=""}=req.body;
-        const {id}=req.User
-        if(!ContactNumber||!Gender||!id);
+        const {id}=req.User;
+        if(!ContactNumber||!Gender||!id)
         {
             return res.status(401).json(
                 {
@@ -68,10 +68,25 @@ exports.UpdateProfile= async(req,res)=>
     }
 }
 
+const delet_User= async()=>
+{
 
-
-
-
+    const response= await Profile.findByIdAndDelete({_id:UserDetailes.AdditionalDetails});
+ 
+    // delete accout schedule like if we resquest to delete my accout after two or three days 
+    // because is their is possibility that user request to delete accout is done by mistake
+    
+    
+    // cron job 
+            const deletd_user= await  User.findByIdAndDelete(
+                {
+                    _id:id
+                }
+            ); 
+            console.log(`Deleted ${deletd_user.deletedCount} accounts.`);
+            return[response,deletd_user];
+    
+}
 
 
 exports.DeleteAcoout= async(req,res)=>
@@ -99,20 +114,21 @@ exports.DeleteAcoout= async(req,res)=>
         }
          // home work  un inroll student from all courses
          
-        const response= await profile.findByIdAndDelete({_id:UserDetailes.AdditionalDetails});
 
-        
+        // const response= await Profile.findByIdAndDelete({_id:UserDetailes.AdditionalDetails});
+ 
 // delete accout schedule like if we resquest to delete my accout after two or three days 
 // because is their is possibility that user request to delete accout is done by mistake
 
-// cron job 
-        const deletd_user= await  User.findByIdAndDelete(
-            {
-                _id:id
-            }
-        ); 
 
-       
+// cron job 
+        // const deletd_user= await  User.findByIdAndDelete(
+            // {
+                // _id:id
+            // }
+        // ); 
+
+        const [response, deletd_user]=cron.schedule('0 0 * * *',await  delet_User());
          return res.status(200).json(
             {
                 status:"successful",
