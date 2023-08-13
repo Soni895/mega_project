@@ -34,7 +34,7 @@ exports.CapturePayment=async (req,res)=>
         });
     }
     // check valid course detailes
-    let course= await Course.findById(CourseId);
+    let course= await Course.findById(Course_Id);
     if(!course)
     {
         return res.status(401).json({
@@ -124,9 +124,9 @@ exports.VerifySignature= async (req,res)=>
         const payload = JSON.stringify(req.body);
         const webhookSecret = 'Amazon@45';
         const expectedSignature = req.headers['x-razorpay-signature'];
-         const hmac = crypto.createHmac('sha256', webhookSecret);
-         hmac.update(payload);
-         const digest=hmac.dige("hex");
+        const hmac = crypto.createHmac('sha256', webhookSecret);
+        hmac.update(payload);
+        const digest=hmac.dige("hex");
 
          if(expectedSignature===digest){
             console.log('Webhook signature verified');
@@ -152,12 +152,12 @@ exports.VerifySignature= async (req,res)=>
                 }
 
                   
-         // find the course and upade
- const Updated_Course= await Course.findByIdAndUpdate(Course_Id,
-    {
+         // find the course and update
+           const   Updated_Course= await Course.findByIdAndUpdate(Course_Id,
+       {
         $push:{StudentEnrolled:User_id,}
 
-    },{new:true})
+       },{new:true})
                 
             } catch (error) {
                 res.status(400).json(
@@ -181,9 +181,9 @@ exports.VerifySignature= async (req,res)=>
                 }
 
 
-                // mail send 
+             // mail send 
 
-                const email_response= await MailSender(Updated_User.Email,"congratulation",
+        const email_response= await MailSender(Updated_User.Email,"congratulation",
                 "payment successful congrtulation to our family");
             res.status(200).json(
                 {
