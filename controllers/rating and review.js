@@ -3,6 +3,7 @@
 // get all rating
   const RatingAndREview= require("../models/ratingandreview");
   const Course= require("../models/course");
+const { default: mongoose } = require("mongoose");
 
   exports.Createrating= async (req,res)=>
   {
@@ -89,3 +90,91 @@
         )
         }
     }
+
+    // get average rating
+
+    exports.GetAverageRating=  async (req,res)=>
+    {
+        try {
+            // get course id
+            // calculate average rating
+            // return rating
+
+            const {CourseId}=req.body;
+            
+            const result= await RatingAndREview.aggregate([
+                {
+                    $match:
+                    {
+                        Course: new mongoose.Types.ObjectId(CourseId),
+                    },
+
+                },
+                {
+                 $group:
+                {
+                    _id:null,
+                    AverageRating:{$avg:"$Rating"} 
+
+                }
+            }
+            ]
+            );
+            if(result.length>0)
+            {
+                return res.status(200).json(
+                    {
+                        Success:true,
+                        message:"Average rating",
+                       AverageRating:result[0].AverageRating,
+                       result,
+            
+            
+                    }
+                )
+            }
+        
+            return res.status(200).json(
+                {
+                    Success:true,
+                    message:"Average rating is zer0",
+                   AverageRating:0,
+                   result,
+        
+        
+                }
+            )
+            
+
+
+        } catch (error) {
+            return res.status(500).json(
+                {
+                    Staus:false,
+                    error,
+                    message:" error in craeting rating and review",
+                }
+            )
+            }
+        
+
+    }
+
+
+    exports.GetAllRating= (req,res)=>
+    {
+        try {
+            
+
+
+
+        } catch (error) {
+            return res.status(500).json(
+                {
+                    Staus:false,
+                    error,
+                    message:" error in craeting rating and review",
+                }
+            )
+        }
+     }
