@@ -1,3 +1,4 @@
+const { validatePaymentVerification } = require("razorpay/dist/utils/razorpay-utils");
 const Tag = require("../models/tag");
 exports.CreateTag=async (req,res)=>
 {
@@ -63,6 +64,63 @@ exports.GetAllTag= async (req,res)=>
           )
          
     }
+
+
+}
+
+//  tag page detailes
+
+exports.tagPageDetailes= async(req,res)=>
+{
+    try {
+        // get category
+    // get all course for specific category id
+    // validation
+    // get courses for different catagory
+    //  gett top selling course
+
+    const {TagId}=req.body;
+    const Selectcategory= await Tag.findById(id).populate("Courses")
+    .exec();
+
+    if(!Selectcategory)
+    {
+        return res.status(404).json(
+            {
+                sucecss:true,
+                Message:  "dat anot found",
+            }
+        )
+    }
+    
+      // get courses for different catagory
+
+      const DifferentCategory= await Tag.find({
+        _id:{$ne:TagId}
+      }).populate("Course").exec();
+
+
+    //   gett 10 top selling course   ***********home work************
+
+    return res.status(200).json({
+        Success:true,
+        Status:"successful",
+        DifferentCategory,
+        Selectcategory
+    })
+    } catch (error) {
+        return res.status(500).json(
+            {
+                status:false,
+                error,
+                Message:error.Message
+
+            }
+          )
+         
+        
+    }
+
 
 
 }
