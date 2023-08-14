@@ -161,11 +161,31 @@ const { default: mongoose } = require("mongoose");
     }
 
 
-    exports.GetAllRating= (req,res)=>
+    exports.GetAllRating= async (req,res)=>
     {
         try {
-            
-
+            const AllRating =  await   RatingAndREview.find({})
+            .sort({Rating:"desc"}).populate(
+                {
+                    path:"User",
+                    select:"FirstName,LastName,Email,Image",
+                }
+            ).populate(
+                {
+                    path:"Course",
+                    select:"CourseName",
+                }
+            ).exec();
+            return res.status(200).json(
+                {
+                    Success:true,
+                    message:"All review fatched successfully ",
+                   AverageRating:0,
+                   result,
+        
+        
+                }
+            )
 
 
         } catch (error) {
@@ -178,3 +198,8 @@ const { default: mongoose } = require("mongoose");
             )
         }
      }
+
+
+
+
+    //  course id ka corresponding get rating mke handler  home wordk
