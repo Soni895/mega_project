@@ -136,7 +136,7 @@ return res.status(200).json({
 
 // get all courses
 
-exports.GetAllCourses= async(req,res)=>
+exports.ShowAllCourses= async(req,res)=>
 {
     try {
         
@@ -165,4 +165,65 @@ exports.GetAllCourses= async(req,res)=>
         
         
     }
+}
+
+
+exports.GetAllCourseDetailes= async (req,res)=>
+{
+try {
+    // fetch course id;
+    const  {CourseId}=req.body;
+    // find course detailed
+    const  CourseDetailes= await Course.find({_id:CourseId})
+    .populate(
+        {
+            path:"Instructor",
+            populate:{
+                path:"AdditionalDetails",
+            }
+        }
+    ).populate("Tag")
+    .populate(
+        {path:"CourseContent",
+        populate:"Subsection"
+    }
+        )
+    .populate("StudentEnrolled")
+    .populate("RatingAndREview").exec();
+
+
+    if(!CourseDetailes)
+    {
+        return res.status(400).json(
+            {
+                success:false,
+             status:"Unsuccessful",
+             message:"Course detailes not found",
+            }
+        )
+    }
+    return res.status(200).json(
+        {
+            staus:"successful",
+            Success:true,
+            CourseDetailes,
+            CourseId,
+
+        }
+    )
+
+    
+} catch (error) {
+    return res.status(400).json(
+        {
+            success:false,
+         status:"Unsuccessful",
+         message:"unable to get course deatailes",
+         error,
+
+        }
+    )
+}
+
+
 }
