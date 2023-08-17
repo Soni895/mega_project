@@ -7,4 +7,4 @@ const {Auth,IsInstructor, IsStudent, IsAdmin }=require("../middlewares/auth");
 router.post("/capturePayment", Auth, IsStudent, CapturePayment);
 router.post("/verifySignature", VerifySignature);
 
-module.exports = router
+module.exports = router;
