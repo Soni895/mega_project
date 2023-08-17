@@ -46,5 +46,10 @@ router.get("/showAllCategories", ShowAllCategories)
 router.post("/getCategoryPageDetails", CategoryPageDetailes)
 
 
+//                       Rating and Review
+router.post("/createRating", Auth, IsStudent, Createrating)
+router.get("/getAverageRating", GetAverageRating)
+router.get("/getReviews", GetAllRating);
+
 
 module.exports = router
