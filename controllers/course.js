@@ -1,5 +1,5 @@
 const Course= require("../models/course");
-const Tag = require("../models/tag");
+const Category = require("../models/category");
 const User=require("../models/user");
 const {ImageUploadToCloudinary}=require("../utils/imageuploader");
  
@@ -13,12 +13,12 @@ exports.CreateCourse=async(req,res)=>
         // data
         // File
         // validation
-        // tag
-  const {CourseName,CourseDescription,Price,Tag,WhatYouWillLearn}=req.body;
+        // Category
+  const {CourseName,CourseDescription,Price,Category,WhatYouWillLearn}=req.body;
 const Thumbnail=req.files.Thumbnail;
 
 //validation
-if(!CourseName||!WhatYouWillLearn||!Tag||!Price||!CourseDescription||!Thumbnail)
+if(!CourseName||!WhatYouWillLearn||!Category||!Price||!CourseDescription||!Thumbnail)
 {
     return res.status(401).json(
         {
@@ -46,15 +46,15 @@ if(!InstructorDetails)
     );
 }
 
-// check given tag is valid or not
-const  TagDetailes= await Tag.findById(Tag);
-if(!TagDetailes)
+// check given Category is valid or not
+const  CategoryDetailes= await Category.findById(Category);
+if(!CategoryDetailes)
 {
     return res.status(401).json(
         {
             status:"Unsuccessful",
             success:false,
-            message:"invalid tag"
+            message:"invalid Category"
         }
     );
 }
@@ -72,7 +72,7 @@ const NewCourse= await Course.create(
         WhatYouWillLearn,
         Thumbnail:ThumbnailImg.secure_url,
         Instructor:InstructorDetails._id,
-        Tag:TagDetailes._id,
+        Category:CategoryDetailes._id,
 
     }
     )
@@ -83,18 +83,18 @@ const Updated_Course= await User.findByIdAndUpdate({_id:InstructorDetails._id},{
         Courses:NewCourse._id,
     }
 },{new:true}
-)  .populate("courses")
+).populate("courses")
 .exec(); 
 
 
-// update tag schema todo.
-const Updated_tag= await Tag.findByIdAndUpdate(Tag,{
+// update Category schema todo.
+const Updated_Category= await Category.findByIdAndUpdate(Category,{
     $push:
     {
         Course:NewCourse._id,
     }
 },{new:true}
-)  .populate("Tag")
+)  .populate("Category")
 .exec(); 
 
 
@@ -111,13 +111,13 @@ return res.status(200).json({
     CourseName,
     CourseDescription,
     Price,
-    Tag,
+    Category,
     WhatYouWillLearn,
     Thumbnail,
     UserId,
     InstructorDetails,
-    TagDetailes,
-    Updated_tag
+    CategoryDetailes,
+    Updated_Category
 })
     } catch (error) {
         return res.status(500).json(
@@ -182,7 +182,7 @@ try {
                 path:"AdditionalDetails",
             }
         }
-    ).populate("Tag")
+    ).populate("Category")
     .populate(
         {path:"CourseContent",
         populate:"Subsection"
@@ -223,7 +223,4 @@ try {
 
         }
     )
-}
-
-
-}
+}}

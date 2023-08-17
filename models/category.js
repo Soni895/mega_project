@@ -1,5 +1,5 @@
 const mongoose=require("mongoose");
-const TagSchema=new mongoose.Schema(
+const CategorySchema=new mongoose.Schema(
     {
         Name:
 
@@ -25,5 +25,5 @@ const TagSchema=new mongoose.Schema(
     ],
     }
 );
-const Tag=mongoose.model("Tag",TagSchema);
-module.exports=Tag;
+const Category=mongoose.model("Category",CategorySchema);
+module.exports=Category;

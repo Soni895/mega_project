@@ -77,7 +77,7 @@ exports.IsStudent=(req,res,next)=>
 
 }
 // Instructor autorization
-exports.Instructor=(req,res,next)=>
+exports.IsInstructor=(req,res,next)=>
 {
     try {
         if(req.User.AccountType!=="Instructor")
@@ -105,7 +105,7 @@ exports.Instructor=(req,res,next)=>
 
 // is admin autorization
 
-exports.isAdmin=(req,res,next)=>
+exports.IsAdmin=(req,res,next)=>
 {
     try {
         if(req.User.AccountType!=="Admin")

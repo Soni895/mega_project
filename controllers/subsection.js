@@ -124,7 +124,7 @@ exports.SubsectionUpdate= async (req,res)=>
 
 // delete subsection
 
-exports.DeteSubsection= async (req,res)=>
+exports.DeleteSubsection= async (req,res)=>
 {
      try {
          // fetech data

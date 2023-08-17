@@ -1,6 +1,6 @@
 const { validatePaymentVerification } = require("razorpay/dist/utils/razorpay-utils");
 const Tag = require("../models/tag");
-exports.CreateTag=async (req,res)=>
+exports.CreateCategory=async (req,res)=>
 {
     try {
         const {Name,Description}=req.body;
@@ -40,7 +40,7 @@ exports.CreateTag=async (req,res)=>
     }
 }
 
-exports.GetAllTag= async (req,res)=>
+exports.GetAllCategory= async (req,res)=>
 {
     try {
         const response= await Tag.find({},{name:true,Description:true});
@@ -70,7 +70,7 @@ exports.GetAllTag= async (req,res)=>
 
 //  tag page detailes
 
-exports.tagPageDetailes= async(req,res)=>
+exports.CategoryPageDetailes= async(req,res)=>
 {
     try {
         // get category
