@@ -1,5 +1,5 @@
 const { validatePaymentVerification } = require("razorpay/dist/utils/razorpay-utils");
-const Tag = require("../models/tag");
+const category = require("../models/category");
 exports.CreateCategory=async (req,res)=>
 {
     try {
@@ -14,7 +14,7 @@ exports.CreateCategory=async (req,res)=>
                 }); 
           }
 
-          const Tag_Deatils= await Tag.create(
+          const Tag_Deatils= await category.create(
             {
                 Name,Description
             }
@@ -43,7 +43,7 @@ exports.CreateCategory=async (req,res)=>
 exports.GetAllCategory= async (req,res)=>
 {
     try {
-        const response= await Tag.find({},{name:true,Description:true});
+        const response= await category.find({},{name:true,Description:true});
         console.log(response);
         return res.status(200).json({
             Success:true,
@@ -80,7 +80,7 @@ exports.CategoryPageDetailes= async(req,res)=>
     //  gett top selling course
 
     const {TagId}=req.body;
-    const Selectcategory= await Tag.findById(id).populate("Courses")
+    const Selectcategory= await category.findById(id).populate("Courses")
     .exec();
 
     if(!Selectcategory)
@@ -95,7 +95,7 @@ exports.CategoryPageDetailes= async(req,res)=>
     
       // get courses for different catagory
 
-      const DifferentCategory= await Tag.find({
+      const DifferentCategory= await category.find({
         _id:{$ne:TagId}
       }).populate("Course").exec();
 
