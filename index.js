@@ -51,6 +51,5 @@ app.get("*",(req,res)=>
     res.send("hi");
 
 });
-
 db_connect();
 cloudinary_connect();
