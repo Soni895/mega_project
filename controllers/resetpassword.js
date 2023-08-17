@@ -54,7 +54,7 @@ try {
 }
 }
 
-exports.ResetPAssword=async (req,res)=>
+exports.ResetPassword=async (req,res)=>
 {
    try {
      //token
