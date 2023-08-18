@@ -1,7 +1,7 @@
 // Otp,signup,login
 // change password
 const User=require("../models/user");
-const Otp=require("../models/otp");
+const otp=require("../models/otp");
 const Profile=require("../models/profile");
 const otpGenerator = require('otp-generator');
 const uniqid = require('uniqid');
@@ -29,33 +29,38 @@ exports.SendOtp=async(req,res)=>
         )
     }
 
-    // generate otp
+    // generate Otp
     const uniqueId = uniqid();
-    let otp = otpGenerator.generate(6, { digits: true, alphabets: false, upperCase: false, specialChars: false  })+uniqueId;
-    console.log("otp=>",otp);
+    let Otp = otpGenerator.generate(6, {
+        upperCaseAlphabets: false,
+        lowerCaseAlphabets: false,
+        specialChars: false,
+    })+uniqueId;
+    console.log("Otp=>",Otp);
     console.log("uniqueId=>",uniqueId);
-    // check unique otp
+    // check unique Otp
 
-    let isuniqueotp= await Otp.findOne({Otp:otp});
+    let isuniqueotp= await otp.findOne({Otp});
+  
      console.log('isuniqueotp=>',isuniqueotp);
 
     while(isuniqueotp)
     {
-         otp = otpGenerator.generate(6, { digits: true })+uniqueId;
-         isuniqueotp = await Otp.findOne({Otp:otp});
+         Otp = otpGenerator.generate(6, { digits: true })+uniqueId;
+         isuniqueotp = await Otp.findOne({Otp:Otp});
     }
 
-    const otpPayload={Email,Otp:otp};
-    const response= await Otp.create(otpPayload);
+    const otpPayload={Email,Otp};
+    const response= await otp.create(otpPayload);
     console.log("response=>",response);
     res.status(200).json(
         {
             status:true,
             response,
-            otp,
+            Otp,
             otpPayload,
             uniqueId,
-            message:"otp send Successful",
+            message:"Otp send Successful",
         }
     )
 
@@ -64,7 +69,7 @@ exports.SendOtp=async(req,res)=>
     res.status(500).json(
         {
             status:false,
-            message:"otp send Unsuccessful",
+            message:"Otp send Unsuccessful",
             error,
         }
     )
@@ -81,7 +86,7 @@ exports.SignUp= async (req,res)=>
         // data fetch
         // validdate 
         // 2nd password matchMediacheck user already exiss
-        // find most recet otp 
+        // find most recet Otp 
         // password hashed
         // save in db
         const {

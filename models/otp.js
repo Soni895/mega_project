@@ -29,7 +29,7 @@ async function SendOtp(Email,otp)
 {
     try {
         const title= "verification code";
-      console.log(title);
+     
         const response= await MailSender(Email,title,otp);
         console.log("response==>",response);
            return response;
@@ -39,10 +39,11 @@ async function SendOtp(Email,otp)
         
     }
 };
-OtpSchema.pre("save",async(next)=>
+OtpSchema.pre("save",async function (next)
 {
-console.log(this.Email,this.Otp);
- const  response= await SendOtp(this.email,this.otp);
+    // console.log(this);
+// console.log(this.Email,this.Otp);
+ const response= await SendOtp(this.Email,this.Otp);
  console.log("response=>",response);
  next();
 });
