@@ -16,7 +16,7 @@ exports.SendOtp=async(req,res)=>
     const {Email}=req.body;
 
     // check if user already exist
-
+    console.log(Email);
     const isprestent=await User.findOne({Email});
     console.log(isprestent);
     if(isprestent)
@@ -37,7 +37,8 @@ exports.SendOtp=async(req,res)=>
     // check unique otp
 
     let isuniqueotp= await Otp.findOne({Otp:otp});
-    console.log(isuniqueotp);
+     console.log('isuniqueotp=>',isuniqueotp);
+     
     while(isuniqueotp)
     {
          otp = otpGenerator.generate(6, { digits: true })+uniqueId;
