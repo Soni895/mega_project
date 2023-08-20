@@ -75,7 +75,7 @@ const UserSchema=new mongoose.Schema(
         ConfirmPassword:
         {
             type:String,
-            required:true,
+            // required:true,
         },
 
     }

@@ -8,6 +8,7 @@ const uniqid = require('uniqid');
 const bcrypt=require("bcrypt");
 require("dotenv").config();
 const jwt= require("jsonwebtoken");
+const jwt_secret=process.env.jwt_secret;
 
 exports.SendOtp=async(req,res)=>
 {
@@ -204,7 +205,6 @@ console.log( AccountType,
                     Password:hashedpassword,
                     ContactNumber,
                     AdditionalDetails:profile._id,
-                    ConfirmPassword
                   
                 }
             );
@@ -252,6 +252,7 @@ exports.Login= async (req,res)=>
         const {Email,Password}=req.body;
 
         if(!Email||!Password)
+        
         {
             return res.status(500).json(
             {
@@ -287,7 +288,7 @@ exports.Login= async (req,res)=>
                   Role:user.AccountType
   
               }
-              const jwt_secret=process.env.jwt_secret;
+             
               let token=jwt.sign(payload,jwt_secret,
                 {
                     expiresIn:"2h",
@@ -295,8 +296,9 @@ exports.Login= async (req,res)=>
 
                 // user=user.toObject();
                 user.Token=token;
-                console.log(user.Token);
                 user.Password=undefined;
+                console.log(user);
+                
 
                 const options={
                     expires:new Date( Date.now()+3*24*60*60*1000),
@@ -320,7 +322,7 @@ exports.Login= async (req,res)=>
         return res.status(500).json(
             {
                 status:false,
-                message:"try again",
+                message:" Login fail please try again",
                   error,
             }
         )
