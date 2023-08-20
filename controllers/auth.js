@@ -157,11 +157,11 @@ console.log( AccountType,
             console.log("recentotp =>",recentotp); 
             if(recentotp.length===0)
             {
-                return{
+                return res.status(400).json({
                     success:false,
                     status:"Unsuccessful",
-                    message:"Otp not found"
-                }
+                    message:"user not found please signup"
+                });
             }else if(Otp!==recentotp[0].Otp)
             {
                 return res.status(400).json(
@@ -312,7 +312,6 @@ exports.Login= async (req,res)=>
                         user,
                         message:"successful login",
                         Email,
-                        Password,
 
                     });
 
