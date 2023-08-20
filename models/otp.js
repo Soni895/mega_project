@@ -42,7 +42,6 @@ async function SendOtp(Email,otp)
 OtpSchema.pre("save",async function (next)
 {
     // console.log(this);
-// console.log(this.Email,this.Otp);
  const response= await SendOtp(this.Email,this.Otp);
  console.log("response=>",response);
  next();
