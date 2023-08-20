@@ -30,14 +30,15 @@ exports.SendOtp=async(req,res)=>
     }
 
     // generate Otp
-    const uniqueId = uniqid();
+    // const uniqueId = uniqid();
     let Otp = otpGenerator.generate(6, {
         upperCaseAlphabets: false,
         lowerCaseAlphabets: false,
         specialChars: false,
-    })+uniqueId;
+    })
+    // +uniqueId;
     console.log("Otp=>",Otp);
-    console.log("uniqueId=>",uniqueId);
+    // console.log("uniqueId=>",uniqueId);
     // check unique Otp
 
     let isuniqueotp= await otp.findOne({Otp});
@@ -46,7 +47,8 @@ exports.SendOtp=async(req,res)=>
 
     while(isuniqueotp)
     {
-         Otp = otpGenerator.generate(6, { digits: true })+uniqueId;
+         Otp = otpGenerator.generate(6, { digits: true })
+        //  +uniqueId;
          isuniqueotp = await Otp.findOne({Otp:Otp});
     }
 
@@ -59,7 +61,7 @@ exports.SendOtp=async(req,res)=>
             response,
             Otp,
             otpPayload,
-            uniqueId,
+            // uniqueId,
             message:"Otp send Successful",
         }
     )

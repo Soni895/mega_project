@@ -8,6 +8,7 @@ const  cookieParser = require('cookie-parser');
 app.use(cookieParser());
 const Cors = require('cors');
 const fileupload=require("express-fileupload");
+const{cloudinary_connect}= require("./config/cloudinary_connect");
 app.use(Cors(
 {
     origin:"http://localhost:3000",
@@ -21,7 +22,7 @@ app.use(fileupload(
         tempFileDir : '/tmp/'
     }
 ));
-const{cloudinary_connect}= require("./config/cloudinary_connect");
+
 
 const CourseRoutes= require("./routes/courses");
 const PaymentRoutes=require("./routes/payments");
