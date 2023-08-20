@@ -139,7 +139,6 @@ console.log( AccountType,
             }
             const isUserPresent= await User.findOne({Email});
             console.log(isUserPresent);
-
             if(isUserPresent)
             {
                 return res.status(400).json(
@@ -151,12 +150,8 @@ console.log( AccountType,
                 )
             }
 
-            const recentotp= await  otp.find({
-                Email,
-            }).sort({
-                CreatedAt:-1
+            const recentotp = await otp.find({ Email }).sort({ CreateAt: -1 }).limit(1);
 
-            }).limit(1);
 
             console.log("recentotp =>",recentotp); 
             if(recentotp.length===0)
@@ -191,6 +186,7 @@ console.log( AccountType,
                     }
                 )
             }
+
             console.log("hashedpassword=>",hashedpassword);
             const profile= await Profile.create({
                 ContactNumber:null,

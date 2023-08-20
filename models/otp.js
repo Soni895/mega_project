@@ -18,7 +18,8 @@ const OtpSchema=new mongoose.Schema(
         {
             type:Date,
             default:Date.now(),
-            // expires:5 * 60 * 1000,
+           
+            // expires:25 * 60,
         }
     }
 );
