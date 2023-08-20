@@ -95,7 +95,6 @@ exports.SignUp= async (req,res)=>
             AccountType,
             Email,FirstName,
             LastName,
-            Image,
             Password,
             ContactNumber,
             Otp,
@@ -104,7 +103,6 @@ exports.SignUp= async (req,res)=>
 console.log( AccountType,
     Email,FirstName,
     LastName,
-    Image,
     Password,
     ContactNumber,
     Otp,
@@ -113,7 +111,7 @@ console.log( AccountType,
             !Email|| 
             !FirstName||
             !LastName||
-            !Image||
+           
             !Password||
             !ContactNumber||
             !Otp||
@@ -140,6 +138,8 @@ console.log( AccountType,
 
             }
             const isUserPresent= await User.findOne({Email});
+            console.log(isUserPresent);
+
             if(isUserPresent)
             {
                 return res.status(400).json(
@@ -151,12 +151,13 @@ console.log( AccountType,
                 )
             }
 
-            const recentotp= await  Otp.find({
+            const recentotp= await  otp.find({
                 Email,
             }).sort({
                 CreatedAt:-1
 
             }).limit(1);
+
             console.log("recentotp =>",recentotp); 
             if(recentotp.length===0)
             {
@@ -165,7 +166,7 @@ console.log( AccountType,
                     status:"Unsuccessful",
                     message:"Otp not found"
                 }
-            }else if(Otp!==recentotp)
+            }else if(Otp!==recentotp[0].Otp)
             {
                 return res.status(400).json(
                     {
@@ -190,12 +191,14 @@ console.log( AccountType,
                     }
                 )
             }
+            console.log("hashedpassword=>",hashedpassword);
             const profile= await Profile.create({
                 ContactNumber:null,
                 About:null,
                 DateOfBirth:null,
                 Gender:null
             });
+            console.log("profile=>",profile);
             const Payload= new User(
                 {
                     AccountType,
@@ -204,13 +207,18 @@ console.log( AccountType,
                     Image:`https://api.dicebear.com/5.x/initials/svg?seed=${FirstName} ${LastName}`,
                     Password:hashedpassword,
                     ContactNumber,
-                    AdditionalDetails:profile._id
+                    AdditionalDetails:profile._id,
+                    ConfirmPassword
                   
                 }
-            )
+            );
+
+            console.log("Payload=>",Payload);
 
          
-            const response= await Payload.save();
+           const response= await Payload.save();
+
+            console.log("response=>",response);
             return res.status(200).json(
                 {
                     status:true,
