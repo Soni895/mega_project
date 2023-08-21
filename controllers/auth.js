@@ -343,18 +343,21 @@ exports.ChangePassword= async (req,res)=>
     const {Token}=req.body||req.cookies ||
  req.header("Authorization").replace("Bearer ","");
 
+ console.log("request data=>",OldPassword,NewPassword,ConfirmNewPassword,Token);
+
  if(!Token)
  {
      return res.status(500).json(
          {
+
              status:"unsuccessful",
              success:false,
              error:" token not found",
          });
  }
 
-
     const payload=jwt.verify(Token,process.env.jwt_secret);
+    console.log("payload=>",payload);
     if(!payload)
     {
         return res.status(500).json(
@@ -365,7 +368,9 @@ exports.ChangePassword= async (req,res)=>
             });
     }
     const _id=payload.id;
+    console.log(_id);
     const response =await User.findById(_id);
+    console.log(response);
     if(!response){
         return res.status(500).json(
             {
@@ -399,22 +404,7 @@ exports.ChangePassword= async (req,res)=>
     let hashedpassword;
     try{
         hashedpassword= await bcrypt.hash(NewPassword,10);
-        const updated_data=await User.findByIdAndUpdate(_id,{
-            Password:hashedpassword,
-        },{ new: true });
-
-        return res.status(200).json(
-            {
-                Status:true,
-                message:"Password change successfull",
-                response,
-                hashedpassword,
-                NewPassword,OldPassword,Password,
-                ismatch,
-                payload,
-                Token
-            }
-        );   
+        console.log("hashedpassword=>",hashedpassword); 
     }
  
     
@@ -429,6 +419,25 @@ exports.ChangePassword= async (req,res)=>
         )
     }
     
+    const updated_data=await User.findByIdAndUpdate(_id,{
+        Password:hashedpassword,
+    },{ new: true });
+    console.log("updated_data=>",updated_data);
+
+    return res.status(200).json(
+        {
+            Status:true,
+            message:"Password change successfull",
+            response,
+            Token,
+            updated_data,
+            hashedpassword,
+            ismatch,
+            payload,
+
+    
+        }
+    );  
         
     } catch (error) {
         return res.status(500).json(
