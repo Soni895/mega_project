@@ -179,12 +179,10 @@ exports.GetallUserDetailes= async (req,res)=>
                 }
             );
         }
-
         return res.status(200).json(
             {
                 status:"successful",
                 message:" user Profile",
-                 id,
                  UserDetailes,
 
             }
