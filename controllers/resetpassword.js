@@ -1,6 +1,7 @@
 const User=require("../models/user");
 const  MailSender=require("../utils/mailsender");
 const bcrypt=require("bcrypt");
+const crypto = require('crypto');
 
 exports.ResetPasswordToken= async (req,res)=>
 {
@@ -16,6 +17,7 @@ try {
 
     const {Email}=req.body;
     const user=await User.findOne({Email});
+    console.log("user=>",user);
     if(!user)
     {
     return res.status(401).json(
@@ -25,13 +27,18 @@ try {
         });
     }
     const Token= crypto.randomUUID();
+    console.log("Token=>",Token);
     const Updated_Deatils=await User.findOneAndUpdate({Email},
         {
             Token,ResetPasswordExpires:Date.now()+5*1000*60,
         },{new:true});
+        console.log("Updated_Deatils=>",Updated_Deatils); 
 
     const url=`http://localhost:3000/Update-Password/${Token}`;
+
+    console.log("url=>",url);
     const resposne= await MailSender(Email,"PasswordReset",url);
+    console.log("resposne=>",resposne);
     return res.status(200).json(
         {
             status:true,
