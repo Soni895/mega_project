@@ -13,6 +13,6 @@ router.get("/getallUserDetailes", Auth, GetallUserDetailes);
 
 // Get Enrolled Courses
 router.get("/getEnrolledCourses", Auth, GetEnrolledCourses);
-router.put("/updateDisplayPicture", Auth, UpdateDisplayPicture);
+router.put("/UpdateDisplayPicture", Auth, UpdateDisplayPicture);
 
 module.exports = router;

@@ -26,9 +26,10 @@ console.log("Token=>",Token);
  }
 //  verify token
 try {
+    console.log("jwt_secret=>",jwt_secret);
     const payload=jwt.verify(Token,jwt_secret);
     req.User=payload;
-    crossOriginIsolated.log("payload=>",payload);
+    console.log("payload=>",payload);
 } catch (error) {
     return res.status(500).json(
         {

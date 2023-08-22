@@ -1,6 +1,7 @@
 const User= require("../models/user");
 const Profile= require("../models/profile");
 const cron = require('node-cron');
+const ImageUploadToCloudinary= require("../utils/imageuploader")
 
 //   update delete
 
@@ -206,7 +207,8 @@ exports.UpdateDisplayPicture = async (req, res) => {
       const displayPicture = req.files.displayPicture
       const userId = req.User.id;
       console.log("User=>",req.User);
-      const image = await uploadImageToCloudinary(
+
+      const image = await ImageUploadToCloudinary(
         displayPicture,
         process.env.FOLDER_NAME,
         1000,
@@ -215,9 +217,10 @@ exports.UpdateDisplayPicture = async (req, res) => {
       console.log("image=>",image);
       const updatedProfile = await User.findByIdAndUpdate(
         { _id: userId },
-        { image: image.secure_url },
+        { Image: image.secure_url },
         { new: true }
-      )
+      );
+      console.log("updatedProfile=>",updatedProfile);
       res.send({
         success: true,
         message: `Image Updated successfully`,
