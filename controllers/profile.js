@@ -18,6 +18,7 @@ exports.UpdateProfile= async(req,res)=>
 
         const {ContactNumber,DateOfBirth="",Gender,About=""}=req.body;
         const {id}=req.User;
+        console.log(ContactNumber,DateOfBirth,Gender,About,id);
         if(!ContactNumber||!Gender||!id)
         {
             return res.status(401).json(
@@ -30,29 +31,34 @@ exports.UpdateProfile= async(req,res)=>
             );
         };
 
-        const UserDetailes= await User.findById(id);
-        cosnole.log(UserDetailes);
-        const ProfileId= UserDetailes.AdditionalDetails;
+    const UserDetails= await User.findById(id).populate("AdditionalDetails").exec();
+        console.log("UserDetailes=>",UserDetails);
+
+        const ProfileId= UserDetails.AdditionalDetails;
+        console.log("ProfileId=>",ProfileId);
+
          const ProfileDetailes= await Profile.findById(ProfileId);
-        const UpdatedProfile= Profile.findByIdAndUpdate(ProfileId,
+         console.log("ProfileDetailes=>",ProfileDetailes);
+
+        const UpdatedProfile=  await  Profile.findByIdAndUpdate(ProfileId,
             {
                 ContactNumber,
                 DateOfBirth,
                 Gender,
                 About,
             },{new:true});
+            
 
-            cosnole.log(UpdatedProfile);
+            console.log("UpdatedProfile=>",UpdatedProfile);
 
             return res.status(200).json(
                 {
                     status:"successful",
                     message:"Profile Created Successful",
-                    UserDetailes,
                     ProfileId,
-                    UserDetailes,
-                    ContactNumber,
+                    UserDetails,
                     ProfileDetailes,
+                    UpdatedProfile
                 }
             );
      
