@@ -1,5 +1,10 @@
 const { validatePaymentVerification } = require("razorpay/dist/utils/razorpay-utils");
 const category = require("../models/category");
+
+
+
+//    add functionality if category is present dont mkae new category
+
 exports.CreateCategory=async (req,res)=>
 {
     try {
@@ -11,6 +16,17 @@ exports.CreateCategory=async (req,res)=>
                     status:"unsuccessful", 
                     success:false,
                     error:" fill all deatiles",
+                }); 
+          }
+          const IsCategoryPresent= await category.findOne({Name});
+
+          if(IsCategoryPresent)
+          {
+            return res.status(500).json(
+                {
+                    status:"successful", 
+                    success:true,
+                    error:" category exist",
                 }); 
           }
 
