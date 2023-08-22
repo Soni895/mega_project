@@ -14,6 +14,7 @@ exports.Auth=async (req,res,next)=>
 const {Token}=req.body||req.cookies ||
  req.header("Authorization").replace("Bearer ","");
 
+console.log("Token=>",Token);
  if(!Token)
  {
      return res.status(500).json(
@@ -27,7 +28,7 @@ const {Token}=req.body||req.cookies ||
 try {
     const payload=jwt.verify(Token,jwt_secret);
     req.User=payload;
-    
+    crossOriginIsolated.log("payload=>",payload);
 } catch (error) {
     return res.status(500).json(
         {

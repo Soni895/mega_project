@@ -8,7 +8,23 @@ const uniqid = require('uniqid');
 const bcrypt=require("bcrypt");
 require("dotenv").config();
 const jwt= require("jsonwebtoken");
+const MailSender=require("../utils/mailsender")
 const jwt_secret=process.env.jwt_secret;
+
+async function Sendotp(Email,otp)
+{
+    try {
+        const title= "verification code";
+     
+        const response= await MailSender(Email,title,otp);
+        console.log("response==>",response);
+           return response;
+    } catch (error) {
+        console.log("error while sending mail\n",error);
+        // throw error;
+        
+    }
+};
 
 exports.SendOtp=async(req,res)=>
 {
@@ -16,21 +32,7 @@ exports.SendOtp=async(req,res)=>
     // fetch emial
     const {Email}=req.body;
 
-    // check if user already exist
-    console.log(Email);
-    const isprestent=await User.findOne({Email});
-    // console.log(isprestent);
-    if(isprestent)
-    {
-         return res.status(401).json(
-            {
-                status:false,
-                message:"user exists",
-            }
-        )
-    }
-
-    // generate Otp
+        // generate Otp
     // const uniqueId = uniqid();
     let Otp = otpGenerator.generate(6, {
         upperCaseAlphabets: false,
@@ -42,7 +44,7 @@ exports.SendOtp=async(req,res)=>
     // console.log("uniqueId=>",uniqueId);
     // check unique Otp
 
-    let isuniqueotp= await otp.findOne({Otp});
+    let isuniqueotp= await otp.findOne({Otp})
   
      console.log('isuniqueotp=>',isuniqueotp);
 
@@ -53,6 +55,35 @@ exports.SendOtp=async(req,res)=>
          isuniqueotp = await Otp.findOne({Otp:Otp});
     }
 
+    // check if user already exist
+    console.log(Email);
+
+    const isprestent=await otp.findOne({Email}).count()
+
+    console.log("Is User Present: " + isprestent)
+    // console.log(isprestent);
+    if(isprestent)
+    {
+        
+
+      const  updatedotp= await otp.findOneAndUpdate({ Email : Email }, { Otp :  Otp},{new:true});
+    // const result = await otp.updateOne(
+    //     { Email: Email }, // Filter
+    //     { $set: { Otp: Otp } }, // Update
+    //     { returnOriginal: false } // Use returnOriginal: false to get the updated document
+    //   );
+
+      const response= await Sendotp(Email,Otp);
+      console.log("updatedotp=>",updatedotp);
+    
+       return  res.status(200).json(
+            {
+                "message" : "User already present! OTP Updated",
+                updatedotp,
+            }
+        )
+    
+    }
     const otpPayload={Email,Otp};
     const response= await otp.create(otpPayload);
     console.log("response=>",response);
@@ -151,10 +182,12 @@ console.log( AccountType,
                 )
             }
 
-            const recentotp = await otp.find({ Email }).sort({ CreateAt: -1 }).limit(1);
+            // const recentotp = await otp.find({ Email }).sort({ CreateAt: -1 }).limit(1);
+            const recentotp = await otp.find({ Email : Email })
 
 
             console.log("recentotp =>",recentotp); 
+
             if(recentotp.length===0)
             {
                 return res.status(400).json({
