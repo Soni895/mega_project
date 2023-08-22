@@ -66,9 +66,7 @@ exports.GetAllCategory= async (req,res)=>
             Status:"successful",
             Message:"find All tag successful",
             response,
-
-
-        })
+        });
 
         
     } catch (error) {
