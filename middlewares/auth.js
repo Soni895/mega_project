@@ -55,7 +55,7 @@ exports.IsStudent=(req,res,next)=>
 {
     try {
     
-        if(req.User.AccountType!=="Student")
+        if(req.User.Role!=="Student")
         {
                 return res.status(500).json(
                     {
@@ -63,8 +63,9 @@ exports.IsStudent=(req,res,next)=>
                         success:false,
                         error:" user not authorize for this role",
                     });
-                    next();
+         
         }
+        next();
         
     } catch (error) {
         return res.status(500).json(
@@ -82,7 +83,7 @@ exports.IsStudent=(req,res,next)=>
 exports.IsInstructor=(req,res,next)=>
 {
     try {
-        if(req.User.AccountType!=="Instructor")
+        if(req.User.Role!=="Instructor")
         {
             return res.status(500).json(
                 {
@@ -110,7 +111,8 @@ exports.IsInstructor=(req,res,next)=>
 exports.IsAdmin=(req,res,next)=>
 {
     try {
-        if(req.User.AccountType!=="Admin")
+        console.log(req.User.Role);
+        if(req.User.Role!=="Admin")
         {
             return res.status(500).json(
                 {

@@ -7,12 +7,13 @@ const {GetallUserDetailes,DeleteAcout,UpdateProfile}= require("../controllers/pr
 const {GetEnrolledCourses,UpdateDisplayPicture}=require("../controllers/profile");
  
 //                             Profile routes
-router.delete("/deleteAcoout", DeleteAcout);
+router.delete("/deleteAcoout", DeleteAcout);                            //testing pending
+
 router.put("/updateProfile", Auth, UpdateProfile);
 router.get("/getallUserDetailes", Auth, GetallUserDetailes);
 
 // Get Enrolled Courses
-router.get("/getEnrolledCourses", Auth, GetEnrolledCourses);
-router.put("/UpdateDisplayPicture", Auth, UpdateDisplayPicture);
+router.get("/getEnrolledCourses", Auth, GetEnrolledCourses);           //testing pending
+router.put("/UpdateDisplayPicture", Auth, UpdateDisplayPicture);      //testing pending
 
 module.exports = router;

@@ -41,9 +41,9 @@ router.post("getCourseDetails",Auth,GetAllCourseDetailes);
 //                 Category routes (Only by Admin)
 // Category can Only be Created by Admin
 
-router.post("/createCategory", Auth, IsAdmin, CreateCategory)
-router.get("/GetAllCategory", GetAllCategory)
-router.post("/getCategoryPageDetails", CategoryPageDetailes)
+router.post("/createCategory", Auth, IsAdmin, CreateCategory);
+router.get("/GetAllCategory", GetAllCategory);
+router.post("/getCategoryPageDetails", CategoryPageDetailes);
 
 
 //                       Rating and Review
