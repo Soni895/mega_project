@@ -49,4 +49,5 @@ OtpSchema.pre("save",async function (next)
 });
 
 const Otp=mongoose.model("Otp", OtpSchema);
+
 module.exports=Otp;
