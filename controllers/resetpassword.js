@@ -84,6 +84,7 @@ exports.ResetPassword=async (req,res)=>
       );
     }
     const UserDetails=await User.findOne({Token});
+    console.log("UserDetails=>",UserDetails);
     if(!UserDetails)
     
     {
@@ -110,6 +111,7 @@ exports.ResetPassword=async (req,res)=>
         {Password:hashedpassword},
         {new:true})
 
+        console.log("resposne=>",resposne);
         return res.status(200).json(
             
             {
