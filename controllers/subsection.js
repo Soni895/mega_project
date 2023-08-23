@@ -1,7 +1,7 @@
 const SubSection= require("../models/SubSection");
 const { findById } = require("../models/course");
 const Section=require("../models/section");
-const {ImageUploadToCloudinary}= require("../utils/imageuploader");
+const ImageUploadToCloudinary= require("../utils/imageuploader");
 require("dotenv").config();
 const Folder_name=process.env.Folder_name;
 
@@ -17,9 +17,9 @@ exports.CreateSubsection= async (req,res)=>
         //create subsection
         //add subsection id into section 
         // return response
-        const {Description,TimeDuration,Title,Sectionid}=req.body;
+        const {Description,TimeDuration,Title,SectionId}=req.body;
         const {VideoFile}=req.files;
-        if(!Description||!TimeDuration||!Title||!Sectionid)
+        if(!Description||!TimeDuration||!Title||!SectionId)
         {
             return res.status(401).json(
                 {
@@ -32,6 +32,8 @@ exports.CreateSubsection= async (req,res)=>
 
         };
         const response= await ImageUploadToCloudinary(VideoFile,Folder_name);
+        
+        console.log("response=>",response);
 
         const SubsectionDetails= await SubSection.create(
             {
@@ -41,8 +43,9 @@ exports.CreateSubsection= async (req,res)=>
                 VideoUrl:response.secure_url,
             }
         );
+        console.log("SubsectionDetails=>",SubsectionDetails);
 
-        const UpdatedSection= await Section.findByIdAndUpdate(Sectionid,
+        const UpdatedSection= await Section.findByIdAndUpdate(SectionId,
             {
                 $push:{SubSection:SubsectionDetails._id}
 
@@ -50,7 +53,7 @@ exports.CreateSubsection= async (req,res)=>
         
             // hw
             // log upadetd section after populate
-
+           console.log("UpdatedSection=>",UpdatedSection);
 
             return res.status(200).json(
                 {
