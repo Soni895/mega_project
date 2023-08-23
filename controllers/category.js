@@ -94,15 +94,17 @@ exports.CategoryPageDetailes= async(req,res)=>
     //  gett top selling course
 
     const {TagId}=req.body;
-    const Selectcategory= await category.findById(id).populate("Courses")
+ console.log(TagId);
+    const Selectcategory= await category.findById(TagId).populate("Courses")
     .exec();
+    console.log("tagId=>",TagId,"Selectcategory=>",Selectcategory);
 
     if(!Selectcategory)
     {
         return res.status(404).json(
             {
                 sucecss:true,
-                Message:  "dat anot found",
+                Message:  "data not found",
             }
         )
     }
@@ -127,7 +129,7 @@ exports.CategoryPageDetailes= async(req,res)=>
             {
                 status:false,
                 error,
-                Message:error.Message
+               Message:"not find course of this category",
 
             }
           )  

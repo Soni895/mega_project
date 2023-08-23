@@ -43,7 +43,7 @@ router.post("getCourseDetails",Auth,GetAllCourseDetailes);
 
 router.post("/createCategory", Auth, IsAdmin, CreateCategory);
 router.get("/GetAllCategory", GetAllCategory);
-router.post("/getCategoryPageDetails", CategoryPageDetailes);
+router.post("/CategoryPageDetailes", CategoryPageDetailes);               //pending
 
 
 //                       Rating and Review
