@@ -34,9 +34,9 @@ router.post("/deleteSubSection",Auth,IsInstructor,DeleteSubsection);
 // Add a Sub Section to a Section
 router.post('/CreateSubsection',Auth,IsInstructor,CreateSubsection);
 // Get all Registered Courses
-router.get("/getAllCourses",Auth,ShowAllCourses);
+router.get("/ShowAllCourses",Auth,ShowAllCourses);
 // Get Details for a Specific Courses
-router.post("/getCourseDetails",Auth,GetAllCourseDetailes);
+router.post("/GetAllCourseDetailes",Auth,GetAllCourseDetailes);
 
 //                 Category routes (Only by Admin)
 // Category can Only be Created by Admin
