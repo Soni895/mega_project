@@ -19,7 +19,7 @@ const CourseSchema=new mongoose.Schema(
             ref:"User",
             required:true
         },
-         WhatYouWillLearn:
+        WhatYouWillLearn:
          {
             type:String,
             required:true
@@ -47,17 +47,23 @@ const CourseSchema=new mongoose.Schema(
         {
             type:Number,
             required:true,
+        },  
+        Tag:
+        {
+            type:String,
+            required:true
         },
+
         Thumbnail:
 
         {
             type:String,
             required:true,
         },
-        Tag:
+        Category:
         {
             type:mongoose.Schema.Types.ObjectId,
-            ref:"Tag",
+            ref:"Category",
             required:true
 
         },
