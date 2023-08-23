@@ -54,7 +54,7 @@ exports.UpdateProfile= async(req,res)=>
             return res.status(200).json(
                 {
                     status:"successful",
-                    message:"Profile Created Successful",
+                    message:"Profile updated Successful",
                     ProfileId,
                     UserDetails,
                     ProfileDetailes,

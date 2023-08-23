@@ -184,7 +184,7 @@ exports.ShowAllCourses= async(req,res)=>
 }
 
 
-exports.GetAllCourseDetailes= async (req,res)=>
+exports.GetCourseDetails= async (req,res)=>
 {
 try {
     // fetch course id;
@@ -201,7 +201,7 @@ try {
     ).populate("Category")
     .populate(
         {path:"CourseContent",
-        populate:"Subsection"
+        populate:"SubSection"
     }
         )
     .populate("StudentEnrolled")
