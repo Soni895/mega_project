@@ -148,8 +148,6 @@ return res.status(200).json({
 exports.ShowAllCourses= async(req,res)=>
 {
     try {
-        
-
         const AllCourse= await Course.find({},{CourseName:true,Price:true,Thumbnail:true,Instructor:true,
         RatingAndREview:true,StudentEnrolled:true}).populate("Instructor").exec();
        
@@ -175,7 +173,6 @@ exports.ShowAllCourses= async(req,res)=>
         
     }
 }
-
 
 exports.GetCourseDetails= async (req,res)=>
 {
