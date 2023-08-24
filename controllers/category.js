@@ -59,7 +59,7 @@ exports.CreateCategory=async (req,res)=>
 exports.GetAllCategory= async (req,res)=>
 {
     try {
-        const response= await category.find({},{name:true,Description:true});
+        const response= await category.find({},{name:true,Description:true}).populate("Course");
         console.log(response);
         return res.status(200).json({
             Success:true,
@@ -95,7 +95,7 @@ exports.CategoryPageDetailes= async(req,res)=>
 
     const {TagId}=req.body;
  console.log(TagId);
-    const Selectcategory= await category.findById(TagId).populate("Courses")
+    const Selectcategory= await category.findById(TagId).populate("Course")
     .exec();
     console.log("tagId=>",TagId,"Selectcategory=>",Selectcategory);
 
@@ -110,12 +110,11 @@ exports.CategoryPageDetailes= async(req,res)=>
     }
     
       // get courses for different catagory
+  const DifferentCategory = await category.find({
+    _id: { $ne: TagId }
+  }).populate("Course").exec();
 
-      const DifferentCategory= await category.find({
-        _id:{$ne:TagId}
-      }).populate("Course").exec();
-
-
+      console.log("DifferentCategory=>",DifferentCategory);
     //   gett 10 top selling course   ***********home work************
 
     return res.status(200).json({
@@ -134,7 +133,4 @@ exports.CategoryPageDetailes= async(req,res)=>
             }
           )  
     }
-
-
-
 }

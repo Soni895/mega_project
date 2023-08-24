@@ -127,29 +127,32 @@ exports.DeleteSection=async (req,res)=>
         // return response
 
         const {SectionId}=req.params;
+        console.log("SectionId=>",SectionId);
         if(!SectionId)
         {
         return res.status(401).json(
             {
                 Success:false,
                 status:"unsuccessful",
-                message:"unable to  Update section",
+                message:"unable to  Delete Section ",
             }
         ) 
         }
         const response= await Section.findByIdAndDelete(SectionId);
+        console.log("response=>",response);
 
           
         
         // delete section from course mdoel   **************hw done*********
-    
-        Updated_Course= await Course.findByIdAndUpdate(response._id,
+    console.log("response._id=>",response._id);
+        Updated_Course= await Course.findByIdAndUpdate({CourseContent:response._id},
             {
                 $pull:{
                     CourseContent: SectionId,
 
                 }
             },{new:true});
+            console.log("Updated_Course=>",Updated_Course);
 
         return res.status(200).json(
             {

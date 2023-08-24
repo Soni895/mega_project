@@ -24,6 +24,6 @@ router.post("/reset-password-token", ResetPasswordToken);
 
 
 // Route for resetting user's password after verification
-router.post("/reset-password", ResetPassword)
+router.post("/reset-password", ResetPassword);
 
 module.exports = router;
