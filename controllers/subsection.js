@@ -49,7 +49,7 @@ exports.CreateSubsection= async (req,res)=>
             {
                 $push:{SubSection:SubsectionDetails._id}
 
-            },{new:true});
+            },{new:true}).populate("SubSection");
         
             // hw
             // log upadetd section after populate
@@ -64,8 +64,6 @@ exports.CreateSubsection= async (req,res)=>
                     response,
                 }
             );
-
-
         
     } catch (error) {
         return res.status(401).json(

@@ -20,18 +20,18 @@ const {GetAllRating,GetAverageRating,Createrating} =require("../controllers/rati
 
 //                              Course routes
 
-router.post("/createCourse",Auth,IsInstructor,CreateCourse);
+router.post("/createCourse",Auth,IsInstructor,CreateCourse);   
 
 //Add a Section to a Course
 router.post("/CreateSection",Auth,IsInstructor,CreateSection);
 // Update a Section
 router.post("/updateSection",Auth,IsInstructor,UpdateSection);
 // Delete a Section
-router.post("/DeleteSection/:SectionId",Auth,IsInstructor,DeleteSection);
+router.post("/DeleteSection/:SectionId",Auth,IsInstructor,DeleteSection);    // pending need to think how to get course id  through user id``
 // Edit Sub Section
 router.post('/updateSubSection',Auth,IsInstructor,SubsectionUpdate);
 // Delete Sub Section
-router.post("/deleteSubSection",Auth,IsInstructor,DeleteSubsection);
+router.post("/DeleteSubsection",Auth,IsInstructor,DeleteSubsection);   // pending need to think how to get course id  through user id
 // Add a Sub Section to a Section
 router.post('/CreateSubsection',Auth,IsInstructor,CreateSubsection);
 // Get all Registered Courses

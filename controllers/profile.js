@@ -96,7 +96,7 @@ const delet_User= async()=>
 }
 
 
-exports.DeleteAcout= async(req,res)=>
+exports.DeleteAccout= async(req,res)=>
 
 {
     try {

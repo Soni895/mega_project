@@ -104,7 +104,6 @@ const Updated_Course= await User.findByIdAndUpdate({_id:UserId},{
 
 console.log("Updated_Course=>",Updated_Course);
 
-
 // update Category schema todo.
 
 const Updated_Category= await category.findByIdAndUpdate({_id:CategoryDetailes._id},{
@@ -126,12 +125,6 @@ return res.status(200).json({
     success:true,
     Updated_Category,
     NewCourse,
-    CourseName,CourseDescription,Price,Category,WhatYouWillLearn,
-    ThumbnailImg, 
-    Thumbnail,
-    UserId,
-    InstructorDetails,
-    CategoryDetailes,
     Updated_Course,
     Tag
 });

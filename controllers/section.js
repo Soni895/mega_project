@@ -32,9 +32,6 @@ exports.CreateSection= async (req,res)=>
         $push:{CourseContent:NewSection._id}
     }, {new:true}).populate({
         path: "CourseContent",
-        populate: {
-            path: "SubSection",
-        },
     })
     .exec();
 
@@ -145,14 +142,36 @@ exports.DeleteSection=async (req,res)=>
         
         // delete section from course mdoel   **************hw done*********
     console.log("response._id=>",response._id);
-        Updated_Course= await Course.findByIdAndUpdate({CourseContent:response._id},
-            {
-                $pull:{
-                    CourseContent: SectionId,
+    // Updated_Course= await Course.findByIdAndUpdate({_id:response._id},
+    //         {
+    //             $pull:{
+    //                 CourseContent: SectionId,
 
-                }
-            },{new:true});
+    //             }
+    //         },{new:true});
+    // const Updated_Course = await Course.findByIdAndUpdate(
+    //     { _id: response._id },
+    //     {
+    //       $pull: {
+    //         CourseContent: SectionId,
+    //       },
+    //     },
+    //     { new: true }
+    //   );
+    // const  Updated_Course=  await Course.findByIdAndUpdate(response._id,{
+    //     $pull:{CourseContent:SectionId}
+    // },{new:true})
+    
             console.log("Updated_Course=>",Updated_Course);
+
+            if(!Updated_Course)
+            {
+                return res.status(500).json(
+                    {
+                        message:"course schema not updated"
+                    }
+                )
+            }
 
         return res.status(200).json(
             {

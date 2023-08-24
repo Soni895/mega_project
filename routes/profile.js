@@ -2,12 +2,12 @@ const express= require("express");
 const router= express.Router();
 
 const {Auth}= require("../middlewares/auth");
-const {GetallUserDetailes,DeleteAcout,UpdateProfile}= require("../controllers/profile");
+const {GetallUserDetailes,DeleteAccout,UpdateProfile}= require("../controllers/profile");
 
 const {GetEnrolledCourses,UpdateDisplayPicture}=require("../controllers/profile");
  
 //                             Profile routes
-router.delete("/deleteAcoout", DeleteAcout);                            //testing pending
+router.delete("/DeleteAccout", DeleteAccout);                            //testing pending
 
 router.put("/updateProfile", Auth, UpdateProfile);
 router.get("/getallUserDetailes", Auth, GetallUserDetailes);
