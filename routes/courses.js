@@ -10,7 +10,7 @@ const{CategoryPageDetailes,GetAllCategory,CreateCategory}= require("../controlle
 // Sections Controllers Import
 const {DeleteSection,UpdateSection,CreateSection}= require("../controllers/section");
 // Sub-Sections Controllers Import
-const {DeleteSubsection,SubsectionUpdate,CreateSubsection} =require("../controllers/subsection");
+const {DeleteSubsection,UpdateSubSection,CreateSubsection} =require("../controllers/subsection");
 // Rating Controllers Import
 const {GetAllRating,GetAverageRating,Createrating} =require("../controllers/rating and review")
 
@@ -29,7 +29,7 @@ router.post("/updateSection",Auth,IsInstructor,UpdateSection);
 // Delete a Section
 router.post("/DeleteSection/:SectionId",Auth,IsInstructor,DeleteSection);    // pending need to think how to get course id  through user id``
 // Edit Sub Section
-router.post('/updateSubSection',Auth,IsInstructor,SubsectionUpdate);
+router.post('/UpdateSubSection',Auth,IsInstructor,UpdateSubSection);
 // Delete Sub Section
 router.post("/DeleteSubsection",Auth,IsInstructor,DeleteSubsection);   // pending need to think how to get course id  through user id
 // Add a Sub Section to a Section

@@ -82,12 +82,15 @@ exports.CreateSubsection= async (req,res)=>
 
 // hw
 // upadte subsection 
-exports.SubsectionUpdate= async (req,res)=>
+exports.UpdateSubSection = async (req,res)=>
 {
     try {
-        const {Description,TimeDuration,Title,Sectionid}=req.body;
+        const {Description,TimeDuration,Title,SectionId}=req.body;
     const {VideoFile}=req.files;
-    if(!Description||!TimeDuration||!Title||!Sectionid)
+    console.log(Description,TimeDuration,Title,SectionId);
+
+
+    if(!Description||!TimeDuration||!Title||!SectionId)
     {
         return res.status(401).json(
             {
@@ -102,8 +105,12 @@ exports.SubsectionUpdate= async (req,res)=>
 
     const response= await ImageUploadToCloudinary(VideoFile,Folder_name);
 
-    const Section_Detailes= await Section.findById(Sectionid);
+    console.log("response=>",response);
+
+    const Section_Detailes= await Section.findById(SectionId);
+    console.log("Section_Detailes=>",Section_Detailes);
     const Subsection_Id= Section_Detailes.SubSection;
+    console.log("Subsection_Id=>",Subsection_Id);
     const UpdatedSubsectionDetails= await SubSection.findByIdAndUpdate(Subsection_Id,
         {
             Title,
@@ -112,6 +119,15 @@ exports.SubsectionUpdate= async (req,res)=>
             VideoUrl:response.secure_url,
         },
         {new:true}
+    );
+    console.log("UpdatedSubsectionDetails=>",UpdatedSubsectionDetails);
+
+    return res.status(200).json(
+        {
+            status:"successful",
+            message:"SubSection Updated Successful",
+            UpdatedSubsectionDetails,
+        }
     );
     } catch (error) {
         return res.status(500).json({
@@ -181,10 +197,5 @@ exports.DeleteSubsection= async (req,res)=>
         })
         
      }
-
-
-
-
-
 
 }
