@@ -19,10 +19,6 @@ const SubSectionSchema=   new mongoose.Schema(
         {
             type:String,
         }
-
-        
-        
-
     }
 );
 const SubSection=mongoose.model("SubSection",SubSectionSchema);
