@@ -148,8 +148,8 @@ exports.DeleteSubsection= async (req,res)=>
         // data validation
         // delete section
         // return response
-        const {SubsectionId}= req.body;
-        if(!SubsectionId)
+        const {SubsectionId,SectionId}= req.body;
+        if(!SubsectionId||!SectionId)
         {
         return res.status(401).json(
             {
@@ -161,10 +161,32 @@ exports.DeleteSubsection= async (req,res)=>
         }
         const response= await SubSection.findByIdAndDelete(SubsectionId);
 
+        if(!response)
+        {
+            return res.status(401).json(
+                {
+                    Success:false,
+                    status:"unsuccessful",
+                    message:" subsection id not found",
+                }
+            ) ;
+        }
     // delete from subsection also
 
-
-    const Updated_Section= await Section.findByIdAndUpdate(response._id,
+      const is_present= await Section.findOne({ SubSection: { $in: [SubsectionId] } });
+  console.log("is_present=>",is_present);
+      if(!is_present)
+      {
+        return res.status(401).json(
+            {
+                Success:false,
+                status:"unsuccessful",
+                message:" subsection id not found in section array",
+            }
+        ) ;
+      }
+    
+    const Updated_Section= await Section.findByIdAndUpdate(SectionId,
         {
             $pull:{
                 SubSection:SubsectionId,
@@ -182,7 +204,8 @@ exports.DeleteSubsection= async (req,res)=>
             message:" sub section Deleted Successfull",
             response,
             Updated_Section,
-            SubsectionId
+            SubsectionId,
+            is_present
 
         }
     )
