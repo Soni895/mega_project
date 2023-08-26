@@ -27,17 +27,16 @@ router.post("/CreateSection",Auth,IsInstructor,CreateSection);
 // Update a Section
 router.post("/updateSection",Auth,IsInstructor,UpdateSection);
 // Delete a Section
-router.post("/DeleteSection/:SectionId",Auth,IsInstructor,DeleteSection);    // pending need to think how to get course id  through user id
-// Edit Sub Section
+router.post("/DeleteSection/:SectionId",Auth,IsInstructor,DeleteSection);   
 router.post('/UpdateSubSection',Auth,IsInstructor,UpdateSubSection);
 // Delete Sub Section
-router.post("/DeleteSubsection",Auth,IsInstructor,DeleteSubsection);   // pending need to think how to get course id  through user id
+router.post("/DeleteSubsection",Auth,IsInstructor,DeleteSubsection);  
 // Add a Sub Section to a Section
 router.post('/CreateSubsection',Auth,IsInstructor,CreateSubsection);
 // Get all Registered Courses
 router.get("/ShowAllCourses",Auth,ShowAllCourses);
 // Get Details for a Specific Courses
-router.post("/GetCourseDetails",Auth,GetCourseDetails);   // testing pending issue in population of detailes
+router.post("/GetCourseDetails",Auth,GetCourseDetails); 
 
 //                            Category routes (Only by Admin)
 // Category can Only be Created by Admin
@@ -47,10 +46,10 @@ router.get("/GetAllCategory", GetAllCategory);
 router.post("/CategoryPageDetailes", CategoryPageDetailes);              
 
 
-//                       Rating and Review
-router.post("/createRating", Auth, IsStudent, Createrating)
-router.get("/getAverageRating", GetAverageRating)
-router.get("/getReviews", GetAllRating);
+//                       Rating and Review                               
+router.post("/createRating", Auth, IsStudent, Createrating)           //pending
+router.get("/getAverageRating", GetAverageRating)                        // pending
+router.get("/getReviews", GetAllRating);                          //pending
 
 
 module.exports = router;
