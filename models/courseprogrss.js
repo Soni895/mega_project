@@ -1,5 +1,5 @@
 const mongoose=require("mongoose");
-const CourseProgressSchema=new mongoose.Schema(
+const CourseProgressSchema= new mongoose.Schema(
     {
         CoursId:
         {
