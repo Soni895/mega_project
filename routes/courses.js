@@ -27,7 +27,7 @@ router.post("/CreateSection",Auth,IsInstructor,CreateSection);
 // Update a Section
 router.post("/updateSection",Auth,IsInstructor,UpdateSection);
 // Delete a Section
-router.post("/DeleteSection/:SectionId",Auth,IsInstructor,DeleteSection);    // pending need to think how to get course id  through user id``
+router.post("/DeleteSection/:SectionId",Auth,IsInstructor,DeleteSection);    // pending need to think how to get course id  through user id
 // Edit Sub Section
 router.post('/UpdateSubSection',Auth,IsInstructor,UpdateSubSection);
 // Delete Sub Section
@@ -39,12 +39,12 @@ router.get("/ShowAllCourses",Auth,ShowAllCourses);
 // Get Details for a Specific Courses
 router.post("/GetCourseDetails",Auth,GetCourseDetails);   // testing pending issue in population of detailes
 
-//                 Category routes (Only by Admin)
+//                            Category routes (Only by Admin)
 // Category can Only be Created by Admin
 
 router.post("/createCategory", Auth, IsAdmin, CreateCategory);
-router.get("/GetAllCategory", GetAllCategory);
-router.post("/CategoryPageDetailes", CategoryPageDetailes);               //pending
+router.get("/GetAllCategory", GetAllCategory);   
+router.post("/CategoryPageDetailes", CategoryPageDetailes);              
 
 
 //                       Rating and Review

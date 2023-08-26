@@ -93,11 +93,10 @@ exports.CategoryPageDetailes= async(req,res)=>
     // get courses for different catagory
     //  gett top selling course
 
-    const {TagId}=req.body;
- console.log(TagId);
-    const Selectcategory= await category.findById(TagId).populate("Course")
+    const {CategoryId}=req.body;
+    const Selectcategory= await category.findById(CategoryId).populate("Course")
     .exec();
-    console.log("tagId=>",TagId,"Selectcategory=>",Selectcategory);
+    console.log("CategoryId=>",CategoryId,"Selectcategory=>",Selectcategory);
 
     if(!Selectcategory)
     {
@@ -111,7 +110,7 @@ exports.CategoryPageDetailes= async(req,res)=>
     
       // get courses for different catagory
   const DifferentCategory = await category.find({
-    _id: { $ne: TagId }
+    _id: { $ne: CategoryId }
   }).populate("Course").exec();
 
       console.log("DifferentCategory=>",DifferentCategory);
