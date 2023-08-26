@@ -1,7 +1,8 @@
 const User= require("../models/user");
 const Profile= require("../models/profile");
 const cron = require('node-cron');
-const ImageUploadToCloudinary= require("../utils/imageuploader")
+const ImageUploadToCloudinary= require("../utils/imageuploader");
+const { promises } = require("nodemailer/lib/xoauth2");
 
 //   update delete
 
@@ -75,23 +76,24 @@ exports.UpdateProfile= async(req,res)=>
     }
 }
 
-const delet_User= async()=>
+const delet_User= async(UserDetailes)=>
 {
-
+       console.log("UserDetailes=>",UserDetailes);
+ 
     const response= await Profile.findByIdAndDelete({_id:UserDetailes.AdditionalDetails});
+
+        console.log("response=>",response);
  
     // delete accout schedule like if we resquest to delete my accout after two or three days 
     // because is their is possibility that user request to delete accout is done by mistake
     
     
     // cron job 
-            const deletd_user= await  User.findByIdAndDelete(
-                {
-                    _id:id
-                }
-            ); 
-            console.log(`Deleted ${deletd_user.deletedCount} accounts.`);
-            return[response,deletd_user];
+    const Deleted_User= await User.findByIdAndDelete(UserDetailes._id);
+              console.log("Deleted_User=>",Deleted_User);
+
+         return[response,Deleted_User];
+
     
 }
 
@@ -106,8 +108,10 @@ exports.DeleteAccout= async(req,res)=>
         // delete profile
         // user delete
         // response
-        const {id}=req.User;
-        const UserDetailes=await User.findById(id);
+        const {Id}=req.body;
+        const UserDetailes=await User.findById(Id);
+
+        console.log("Id,UserDetailes=>",Id,"\n",UserDetailes);
         if(!UserDetailes)
         {
             return res.status(404).json(
@@ -123,29 +127,68 @@ exports.DeleteAccout= async(req,res)=>
          
 
         // const response= await Profile.findByIdAndDelete({_id:UserDetailes.AdditionalDetails});
+        // const Deleted_User= await User.findByIdAndDelete(Id);
+
+
+        //  console.log("response",response);
+        //  console.log("Deleted_User=>",Deleted_User);
  
 // delete accout schedule like if we resquest to delete my accout after two or three days 
 // because is their is possibility that user request to delete accout is done by mistake
 
 
 // cron job 
-        // const deletd_user= await  User.findByIdAndDelete(
-            // {
-                // _id:id
-            // }
-        // ); 
+   
+let  response, Deleted_User;
 
-        const [response, deletd_user]=cron.schedule('0 0 * * *',await  delet_User());
-         return res.status(200).json(
-            {
-                status:"successful",
-                message:"Profile Created Successful",
-                 id,
-                 UserDetailes,
-                 response,
-                 deletd_user
-            }
-        );
+const jobPromise = new Promise(async (resolve, reject) => {
+    const scheduledJob = cron.schedule('* * * * *', async () => {
+        [response, Deleted_User] = await delet_User(UserDetailes);
+        console.log("response", response);
+        console.log("Deleted_User=>", Deleted_User);
+        resolve(); // Resolve the promise when the job is completed
+    });
+});
+        // const scheduledJob =  cron.schedule('* * * * *',async()=>
+        // {
+        //   [response, Deleted_User]= await delet_User(UserDetailes);
+        //     //  console.log("response=>",response);
+        //     //  console.log("Deleted_User=>",Deleted_User);
+              
+        // } );
+
+        // console.log("scheduledJob=>",scheduledJob);
+
+           console.log("jobPromise=>",jobPromise);
+        jobPromise.then(()=>
+        {
+          
+            return res.status(200).json({
+                status: "scheduled",
+                message: "Profile deletion scheduled",
+                Id,
+                UserDetailes,
+                // scheduledJob,
+                response,
+                Deleted_User,
+                jobPromise
+            
+            });
+
+        }).catch((error)=>
+        {
+            return res.status(404).json(
+                {
+                    Success:false,
+                    status:"unsuccessful",
+                    message:"use not deleted",
+                    error
+    
+                }
+            );
+        })
+      
+      
 
         
     } catch (error) {
@@ -153,7 +196,7 @@ exports.DeleteAccout= async(req,res)=>
             {
                 Success:false,
                 status:"unsuccessful",
-                message:"unable to  Create profile",
+                message:"unable to  deleted profile",
                 error,
     
             }
