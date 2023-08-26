@@ -124,8 +124,10 @@ exports.DeleteSection=async (req,res)=>
         // return response
 
         const {SectionId}=req.params;
+        const {CouresId}=req.body;
         console.log("SectionId=>",SectionId);
-        if(!SectionId)
+        console.log("CouresId=>",CouresId);
+        if(!SectionId||!CouresId)
         {
         return res.status(401).json(
             {
@@ -138,30 +140,28 @@ exports.DeleteSection=async (req,res)=>
         const response= await Section.findByIdAndDelete(SectionId);
         console.log("response=>",response);
 
-          
+          if(!response)
+          {
+            
+            return res.status(401).json(
+                {
+                    Success:false,
+                    status:"unsuccessful",
+                    message:"section not found ",
+                }
+            ) 
+          }
         
         // delete section from course mdoel   **************hw done*********
-    console.log("response._id=>",response._id);
-    // Updated_Course= await Course.findByIdAndUpdate({_id:response._id},
-    //         {
-    //             $pull:{
-    //                 CourseContent: SectionId,
+       console.log("response=>",response);
 
-    //             }
-    //         },{new:true});
-    // const Updated_Course = await Course.findByIdAndUpdate(
-    //     { _id: response._id },
-    //     {
-    //       $pull: {
-    //         CourseContent: SectionId,
-    //       },
-    //     },
-    //     { new: true }
-    //   );
-    // const  Updated_Course=  await Course.findByIdAndUpdate(response._id,{
-    //     $pull:{CourseContent:SectionId}
-    // },{new:true})
-    
+       Updated_Course= await Course.findByIdAndUpdate(CouresId,{
+        $pull:{
+            CourseContent:SectionId
+        }
+
+       },{new:true}).populate("CourseContent");
+  
             console.log("Updated_Course=>",Updated_Course);
 
             if(!Updated_Course)
