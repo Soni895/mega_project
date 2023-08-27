@@ -142,23 +142,16 @@ exports.DeleteAccout= async(req,res)=>
 let  response, Deleted_User;
 
 const jobPromise = new Promise(async (resolve, reject) => {
-    const scheduledJob = cron.schedule('* * * * *', async () => {
+    const scheduledJob = cron.schedule('0 0 * * *', async () => {
         [response, Deleted_User] = await delet_User(UserDetailes);
         console.log("response", response);
         console.log("Deleted_User=>", Deleted_User);
         resolve(); // Resolve the promise when the job is completed
     });
 });
-        // const scheduledJob =  cron.schedule('* * * * *',async()=>
-        // {
-        //   [response, Deleted_User]= await delet_User(UserDetailes);
-        //     //  console.log("response=>",response);
-        //     //  console.log("Deleted_User=>",Deleted_User);
-              
-        // } );
+       
 
-        // console.log("scheduledJob=>",scheduledJob);
-
+    
            console.log("jobPromise=>",jobPromise);
         jobPromise.then(()=>
         {
