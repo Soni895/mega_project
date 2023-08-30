@@ -8,8 +8,7 @@ const User=require("../models/user");
 const  jwt_secret=process.env.jwt_secret;
 exports.Auth=async (req,res,next)=>
 {
-    try {
-        
+    try {        
 // extract tooken
 const {Token}=req.body||req.cookies ||
  req.header("Authorization").replace("Bearer ","");
