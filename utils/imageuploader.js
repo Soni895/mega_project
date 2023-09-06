@@ -12,10 +12,7 @@ ImageUploadToCloudinary=async (file,folder,height,quality)=>
         if(height){
             option.height=height;
         }
-        return  response = await cloudinary.uploader.upload(file.tempFilePath,option);
-    
-  
-    
+        return  response = await cloudinary.uploader.upload(file.tempFilePath,option)
 
 }
 
