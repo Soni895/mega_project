@@ -1,8 +1,6 @@
 const { validatePaymentVerification } = require("razorpay/dist/utils/razorpay-utils");
 const category = require("../models/category");
 
-
-
 //    add functionality if category is present dont mkae new category
 
 exports.CreateCategory=async (req,res)=>
