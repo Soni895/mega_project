@@ -1,6 +1,6 @@
 const nodemailer= require("nodemailer");
 require("dotenv").config();
-const MailSender= async (email="darshansoni895@gmail.com",title,body=123455)=>  
+const MailSender= async (email,title,body)=>  
 {
   console.log(email,title,body);
 
