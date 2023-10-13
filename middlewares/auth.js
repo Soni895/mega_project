@@ -4,7 +4,6 @@
 //  isadmin
 const jwt= require("jsonwebtoken");
 require("dotenv").config();
-const User=require("../models/user");
 const  jwt_secret=process.env.jwt_secret;
 exports.Auth=async (req,res,next)=>
 {

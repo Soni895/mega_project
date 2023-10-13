@@ -29,7 +29,6 @@ const PaymentRoutes=require("./routes/payments");
 const ProfileRoutes= require("./routes/profile");
 const UserRoutes=require("./routes/User");
 
-app.use("",CourseRoutes);
 
 
 app.listen(port,()=>
