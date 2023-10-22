@@ -13,7 +13,8 @@ const MailSender= async (email,title,body)=>
             },
           });
           console.log("transporter =>",transporter);
-
+          
+          // Create an email message
           let MailOptions = {
             from: `darshan soni`, // Sender's email address
             to: email,                 // Recipient's email address
