@@ -58,15 +58,16 @@ exports.SendOtp=async(req,res)=>
     // check if user already exist
     console.log(Email);
 
-    const isprestent=await otp.findOne({Email}).count()
+    const isprestent=await otp.find({Email}).count();
 
     console.log("Is User Present: " + isprestent)
-    // console.log(isprestent);
+    
     if(isprestent)
     {
         
 
-      const  updatedotp= await otp.findOneAndUpdate({ Email : Email }, { Otp :  Otp},{new:true});
+      const  updatedotp= await otp.findOneAndUpdate({ Email }, { Otp},{new:true});
+
     // const result = await otp.updateOne(
     //     { Email: Email }, // Filter
     //     { $set: { Otp: Otp } }, // Update
