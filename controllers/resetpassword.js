@@ -95,15 +95,15 @@ exports.ResetPassword=async (req,res)=>
             }
           );
     }
-    if(UserDetails.ResetPasswordExpires>Date.now())
-    {
-        return res.status(500).json(
-            {
-                status:false,
-                message:"token is expire please regenertae password",
-            }
-          )
-    }
+    // if(UserDetails.ResetPasswordExpires>Date.now())
+    // {
+    //     return res.status(500).json(
+    //         {
+    //             status:false,
+    //             message:"token is expire please regenertae password",
+    //         }
+    //       )
+    // }
 
     const hashedpassword= await bcrypt.hash(Password,10);
 
@@ -118,6 +118,7 @@ exports.ResetPassword=async (req,res)=>
                 staus:true,
                 message:"password reset successfull",
                 resposne,
+                success:true
 
             }
         );
