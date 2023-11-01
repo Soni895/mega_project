@@ -126,10 +126,11 @@ exports.SignUp= async (req,res)=>
         // save in db
         const {
             AccountType,
-            Email,FirstName,
+            Email,
+            FirstName,
             LastName,
             Password,
-            ContactNumber,
+            ContactNumber=null,
             Otp,
             ConfirmPassword
         }=req.body;
@@ -146,7 +147,7 @@ console.log( AccountType,
             !LastName||
            
             !Password||
-            !ContactNumber||
+           
             !Otp||
             !ConfirmPassword)
             {
