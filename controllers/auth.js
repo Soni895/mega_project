@@ -175,7 +175,7 @@ console.log( AccountType,
             console.log(isUserPresent);
             if(isUserPresent)
             {
-                return res.status(400).json(
+                return res.status(200).json(
                     {
                         success:false,
                         status:"Unsuccessful",
@@ -253,7 +253,7 @@ console.log( AccountType,
             return res.status(200).json(
                 {
                     status:true,
-                    message:"user Signup successful",
+                    message:"Account Created successful",
                     response,
                     Payload,
                     hashedpassword,
