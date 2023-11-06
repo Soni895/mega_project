@@ -39,6 +39,7 @@ app.listen(port,()=>
 
 
 // mount the route
+
 app.use("/api/v1/Course",CourseRoutes);
 app.use("/api/v1/Profile",ProfileRoutes);
 app.use("/api/v1/Payment",PaymentRoutes);
