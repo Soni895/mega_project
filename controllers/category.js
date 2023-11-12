@@ -77,7 +77,6 @@ exports.GetAllCategory= async (req,res)=>
          
     }
 
-
 }
 
 //  tag page detailes
