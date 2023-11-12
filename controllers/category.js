@@ -57,7 +57,7 @@ exports.CreateCategory=async (req,res)=>
 exports.GetAllCategory= async (req,res)=>
 {
     try {
-        const response= await category.find({},{name:true,Description:true}).populate("Course");
+        const response= await category.find({});
         console.log(response);
         return res.status(200).json({
             Success:true,
