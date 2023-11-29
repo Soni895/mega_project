@@ -29,6 +29,14 @@ const UserSchema=new mongoose.Schema(
             required:true,
            enum: ["Admin","Student","Instructor"],
         },
+        Active: {
+            type: Boolean,
+            default: true,
+          },
+          Approved: {
+            type: Boolean,
+            default: true,
+          },
 
         AdditionalDetails:
         {
@@ -72,21 +80,11 @@ const UserSchema=new mongoose.Schema(
             type:String,
             required:true,
         },
-        ConfirmPassword:
-        {
-            type:String,
-            // required:true,
-        },
-        // active: {
-		// 	type: Boolean,
-		// 	default: true,
-		// },
-		// approved: {
-		// 	type: Boolean,
-		// 	default: true,
-		// },
+       
+       
 
-    }
+    },
+    { timestamps: true }
 );
 const User= mongoose.model("User",UserSchema);
 
