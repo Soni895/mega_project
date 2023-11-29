@@ -5,6 +5,7 @@ const SectionSchema=new mongoose.Schema(
 
         {
             type:String,
+            required:true
 
         },
       SubSection:
@@ -15,7 +16,7 @@ const SectionSchema=new mongoose.Schema(
             ref:"SubSection", 
         }
       ],
-      
+  
     }
 );
 const section=mongoose.model("Section",SectionSchema);
