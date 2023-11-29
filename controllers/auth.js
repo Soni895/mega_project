@@ -21,7 +21,7 @@ async function Sendotp(Email,otp)
            return response;
     } catch (error) {
         console.log("error while sending mail\n",error);
-        // throw error;
+        throw error;
         
     }
 };
@@ -66,7 +66,7 @@ exports.SendOtp=async(req,res)=>
     {
         
 
-      const  updatedotp= await otp.findOneAndUpdate({ Email }, { Otp},{new:true});
+      const  updatedotp= await otp.findOneAndUpdate({ Email }, {OtpInfo:{ Otp}},{new:true});
 
     // const result = await otp.updateOne(
     //     { Email: Email }, // Filter
@@ -81,11 +81,12 @@ exports.SendOtp=async(req,res)=>
             {
                 "message" : "User already present! OTP Updated",
                 updatedotp,
+                response
             }
         )
     
     }
-    const otpPayload={Email,Otp};
+    const otpPayload={Email,OtpInfo:{ Otp}};
     const response= await otp.create(otpPayload);
     console.log("response=>",response);
     res.status(200).json(
