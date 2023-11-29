@@ -34,6 +34,7 @@ console.log("mail_pass:", process.env.mail_pass);
 
       console.log("error to send email");
         console.log(error);
+        return error;
      }
 }
 

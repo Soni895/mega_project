@@ -300,3 +300,14 @@ exports.GetEnrolledCourses = async (req, res) => {
       })
     }
 };
+
+
+exports.InstructorDashboard= async (req,res)=>
+{
+    try {
+        
+    } catch (error) {
+        
+    }
+
+}
