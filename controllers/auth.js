@@ -303,7 +303,7 @@ exports.Login= async (req,res)=>
                         {
                             status:"unsuccessful",
                             success:false,
-                            error:"user  not found",
+                            error:"user not found",
                         });
               }
               const ismatch= await bcrypt.compare(Password,user.Password);
@@ -324,9 +324,9 @@ exports.Login= async (req,res)=>
   
               }
              
-              let token=jwt.sign(payload,jwt_secret,
+              const  token=jwt.sign(payload,jwt_secret,
                 {
-                    expiresIn:"2h",
+                    expiresIn:"24h",
                 });
 
                 // user=user.toObject();
@@ -334,9 +334,9 @@ exports.Login= async (req,res)=>
                 user.Password=undefined;
                 console.log(user);
                 
-
+ // Save token to user document in database
                 const options={
-                    expires:new Date( Date.now()+3*24*60*60*1000),
+                    expires:new Date(Date.now()+3*24*60*60*1000),
                    httpOnly:true,
 
                 }
@@ -349,8 +349,6 @@ exports.Login= async (req,res)=>
                         Email,
 
                     });
-
-
         
     } catch (error) {
         return res.status(500).json(

@@ -6,18 +6,19 @@ const OtpSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  Otp: {
-    type: String,
-    required: true,
-  },
-  CreateAt: {
-    type: Date,
-    default: Date.now,
+  OtpInfo: {
+    Otp: {
+      type: String,
+      required: true,
+    },
+    CreateAt: {
+      type: Date,
+      default: Date.now,
 
-    expires: 60 * 5, // The document will be automatically deleted after 5 minutes of its creation time
+      expires: 60 * 5, // The document will be automatically deleted after 5 minutes of its creation time
+    },
   },
 });
-
 // a function to send mail
 
 async function SendOtp(Email, otp) {
