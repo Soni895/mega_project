@@ -10,6 +10,7 @@ require("dotenv").config();
 const jwt= require("jsonwebtoken");
 const MailSender=require("../utils/mailsender");
 const  {OtpEmail}= require('../Mail-Template/EmailVerificationTemplate');
+const {passwordUpdatedEmail}= require("../Mail-Template/passwordUpdate");
 const jwt_secret=process.env.jwt_secret;
 
 async function Sendotp(Email,otp)
@@ -203,11 +204,10 @@ console.log( AccountType,
             }
 
              // Find the most recent OTP for the email
-         const recentotp = await otp.find({ Email }).sort({ createdAt: -1 }).limit(1)
+        //  const recentotp = await otp.find({ Email }).sort({ createdAt: -1 }).limit(1);
 
             // const recentotp = await otp.find({ Email }).sort({ CreateAt: -1 }).limit(1);
-            // const recentotp = await otp.find({ Email : Email })
-
+            const recentotp = await otp.find({ Email : Email });
 
 
             console.log("recentotp =>",recentotp); 
@@ -219,7 +219,7 @@ console.log( AccountType,
                     status:"Unsuccessful",
                     message:"user not found please signup"
                 });
-            }else if(Otp!==recentotp[0].Otp)
+            }else if(Otp!==recentotp[0].OtpInfo.Otp)
             {
                 return res.status(400).json(
                     {
@@ -246,6 +246,10 @@ console.log( AccountType,
             }
 
             console.log("hashedpassword=>",hashedpassword);
+
+            // Create the user
+    let Approved = ""
+    Approved === "Instructor" ? (Approved = false) : (Approved = true)
             const profile= await Profile.create({
                 ContactNumber:null,
                 About:null,
@@ -256,12 +260,14 @@ console.log( AccountType,
             const Payload= new User(
                 {
                     AccountType,
-                    Email,FirstName,
+                    Email,
+                    FirstName,
                     LastName,
                     Image:`https://api.dicebear.com/5.x/initials/svg?seed=${FirstName} ${LastName}`,
                     Password:hashedpassword,
                     ContactNumber,
                     AdditionalDetails:profile._id,
+                    Approved
                   
                 }
             );
@@ -458,7 +464,7 @@ exports.ChangePassword= async (req,res)=>
     };
     let hashedpassword;
     try{
-        hashedpassword= await bcrypt.hash(NewPassword,10);
+         hashedpassword= await bcrypt.hash(NewPassword,10);
         console.log("hashedpassword=>",hashedpassword); 
     }
  
@@ -477,6 +483,23 @@ exports.ChangePassword= async (req,res)=>
     const updated_data=await User.findByIdAndUpdate(_id,{
         Password:hashedpassword,
     },{ new: true });
+      // Send notification email
+      let MailResponse;
+    try {
+       MailResponse= await  MailSender(payload.Email,
+        "Password for your account has been updated",passwordUpdatedEmail(payload.Email,
+            `Password updated successfully for ${updated_data.FirstName} ${updated_data.LastName}`  ))
+        
+    } catch (error) {
+        return res.status(500).json(
+            {
+                status:false,
+                message:"email send failed",
+                error,
+            }
+        )
+        
+    }
     console.log("updated_data=>",updated_data);
 
     return res.status(200).json(
@@ -484,6 +507,7 @@ exports.ChangePassword= async (req,res)=>
             Status:true,
             message:"Password change successfull",
             response,
+            MailResponse,
             Token,
             updated_data,
             hashedpassword,

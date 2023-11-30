@@ -24,11 +24,11 @@ exports.Auth = async (req, res, next) => {
     //  verify token
     try {
       console.log("jwt_secret=>", jwt_secret);
-      console.log("req.user before=>",req);
+      // console.log("req.user before=>",req);
       const payload = jwt.verify(Token, jwt_secret);
     
       req.User = payload;
-      console.log("payload=>", payload,req.User,req.user);
+      console.log("payload=>", payload,req.User);
     } catch (error) {
       return res.status(500).json({
         status: "unsuccessful",
