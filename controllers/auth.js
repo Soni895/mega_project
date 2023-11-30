@@ -32,6 +32,20 @@ exports.SendOtp=async(req,res)=>
     // fetch emial
     const {Email}=req.body;
 
+    // Check if user is already present
+    // Find user with provided email
+    const checkUserPresent = await User.findOne({ Email });
+    // to be used in case of signup
+
+    // If user found with provided email
+    if (checkUserPresent) {
+      // Return 401 Unauthorized status code with error message
+      return res.status(401).json({
+        success: false,
+        message: `User is Already Registered`,
+      })
+    }
+
         // generate Otp
     // const uniqueId = uniqid();
     let Otp = otpGenerator.generate(6, {
@@ -44,7 +58,7 @@ exports.SendOtp=async(req,res)=>
     // console.log("uniqueId=>",uniqueId);
     // check unique Otp
 
-    let isuniqueotp= await otp.findOne({Otp})
+    let isuniqueotp= await otp.findOne({OtpInfo});
   
      console.log('isuniqueotp=>',isuniqueotp);
 
@@ -84,7 +98,6 @@ exports.SendOtp=async(req,res)=>
                 response
             }
         )
-    
     }
     const otpPayload={Email,OtpInfo:{ Otp}};
     const response= await otp.create(otpPayload);
@@ -185,8 +198,12 @@ console.log( AccountType,
                 )
             }
 
+             // Find the most recent OTP for the email
+         const recentotp = await otp.find({ Email }).sort({ createdAt: -1 }).limit(1)
+
             // const recentotp = await otp.find({ Email }).sort({ CreateAt: -1 }).limit(1);
-            const recentotp = await otp.find({ Email : Email })
+            // const recentotp = await otp.find({ Email : Email })
+
 
 
             console.log("recentotp =>",recentotp); 
