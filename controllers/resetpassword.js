@@ -2,11 +2,12 @@ const User=require("../models/user");
 const  MailSender=require("../utils/mailsender");
 const bcrypt=require("bcrypt");
 const crypto = require('crypto');
+const {PasswordUpdatedEmail}= require("../Mail-Template/passwordUpdate")
 
 exports.ResetPasswordToken= async (req,res)=>
 {
 try {
-     // steps
+    // steps
     // getmail
     // validation 
     // check is exists
@@ -37,7 +38,9 @@ try {
     const url=`http://localhost:3000/Update-Password/${Token}`;
 
     console.log("url=>",url);
-    const resposne= await MailSender(Email,"PasswordReset",url);
+    const resposne= await MailSender(Email, "Reset Password",
+     `Your Link for email verification is ${url}. 
+     Please click this url to reset your password.`);
     console.log("resposne=>",resposne);
     return res.status(200).json(
         {
@@ -95,29 +98,45 @@ exports.ResetPassword=async (req,res)=>
             }
           );
     }
-    // if(UserDetails.ResetPasswordExpires>Date.now())
-    // {
-    //     return res.status(500).json(
-    //         {
-    //             status:false,
-    //             message:"token is expire please regenertae password",
-    //         }
-    //       )
-    // }
+   
+
+    if (!(UserDetails.ResetPasswordExpires > Date.now())) {
+        return res.status(403).json({
+          success: false,
+          message: `Token is Expired, Please Regenerate Your Token`,
+        })
+      }
 
     const hashedpassword= await bcrypt.hash(Password,10);
 
-    const resposne= await User.findOneAndUpdate({Token},
+    const response= await User.findOneAndUpdate({Token},
         {Password:hashedpassword},
-        {new:true})
+        {new:true});
 
-        console.log("resposne=>",resposne);
+        // send notification for reste password
+        let MailResponse;
+        try {
+           MailResponse= await  MailSender(response.Email,
+            "Restet Password Successful",PasswordUpdatedEmail(response.Email,`${response.FirstName} ${response.LastName}` ));
+            
+        } catch (error) {
+            return res.status(500).json(
+                {
+                    status:false,
+                    message:"email send failed",
+                    error,
+                }
+            )
+            
+        }
+
+        console.log("resposne=>",response);
         return res.status(200).json(
             
             {
                 staus:true,
                 message:"password reset successfull",
-                resposne,
+                resposne: response,
                 success:true
 
             }

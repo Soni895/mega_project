@@ -10,9 +10,8 @@ require("dotenv").config();
 const jwt= require("jsonwebtoken");
 const MailSender=require("../utils/mailsender");
 const  {OtpEmail}= require('../Mail-Template/EmailVerificationTemplate');
-const {passwordUpdatedEmail}= require("../Mail-Template/passwordUpdate");
+const {PasswordUpdatedEmail}= require("../Mail-Template/passwordUpdate");
 const jwt_secret=process.env.jwt_secret;
-
 async function Sendotp(Email,otp)
 {
     try {
@@ -487,7 +486,7 @@ exports.ChangePassword= async (req,res)=>
       let MailResponse;
     try {
        MailResponse= await  MailSender(payload.Email,
-        "Password for your account has been updated",passwordUpdatedEmail(payload.Email,
+        "Password for your account has been updated",PasswordUpdatedEmail(payload.Email,
             `Password updated successfully for ${updated_data.FirstName} ${updated_data.LastName}`  ))
         
     } catch (error) {

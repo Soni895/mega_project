@@ -1,4 +1,4 @@
-exports.passwordUpdatedEmail = (email, name) => {
+exports.PasswordUpdatedEmail = (email, name) => {
 	return `<!DOCTYPE html>
     <html>
     
