@@ -38,7 +38,7 @@ OtpSchema.pre("save", async function (next) {
   // Only send an email when a new document is created
   console.log(this.isNew);
   if (this.isNew) {
-    const response = await SendOtp(this.Email, this.Otp);
+    const response = await SendOtp(this.Email, this.OtpInfo.Otp);
     console.log("response=>", response);
   }
 

@@ -8,7 +8,8 @@ const uniqid = require('uniqid');
 const bcrypt=require("bcrypt");
 require("dotenv").config();
 const jwt= require("jsonwebtoken");
-const MailSender=require("../utils/mailsender")
+const MailSender=require("../utils/mailsender");
+const  {OtpEmail}= require('../Mail-Template/EmailVerificationTemplate');
 const jwt_secret=process.env.jwt_secret;
 
 async function Sendotp(Email,otp)
@@ -16,7 +17,7 @@ async function Sendotp(Email,otp)
     try {
         const title= "verification code";
      
-        const response= await MailSender(Email,title,otp);
+        const response= await MailSender(Email,title,OtpEmail(otp));
         console.log("response==>",response);
            return response;
     } catch (error) {
@@ -35,6 +36,8 @@ exports.SendOtp=async(req,res)=>
     // Check if user is already present
     // Find user with provided email
     const checkUserPresent = await User.findOne({ Email });
+
+    console.log(checkUserPresent)
     // to be used in case of signup
 
     // If user found with provided email
@@ -43,6 +46,7 @@ exports.SendOtp=async(req,res)=>
       return res.status(401).json({
         success: false,
         message: `User is Already Registered`,
+        checkUserPresent
       })
     }
 
@@ -58,7 +62,7 @@ exports.SendOtp=async(req,res)=>
     // console.log("uniqueId=>",uniqueId);
     // check unique Otp
 
-    let isuniqueotp= await otp.findOne({OtpInfo});
+    let isuniqueotp= await otp.findOne({OtpInfo:{Otp}});
   
      console.log('isuniqueotp=>',isuniqueotp);
 
