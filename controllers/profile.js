@@ -82,31 +82,30 @@ const delet_User= async(UserDetailes)=>
     try {
         console.log("UserDetailes=>",UserDetailes);
  
-        const response= await Profile.findByIdAndDelete({_id:UserDetailes.AdditionalDetails});
-        console.log(response);
-        for (const courseId of User.Courses) {
+        const ProfileResponse= await Profile.findByIdAndDelete({_id:(UserDetailes.AdditionalDetails)});
+        console.log(ProfileResponse);
+        for (const courseId of UserDetailes.Courses) {
             console.log(courseId);
-           const response= await Course.findByIdAndUpdate(
+           const CourseResponse= await Course.findByIdAndUpdate(
               courseId,
-              { $pull: { StudentEnrolled: UserDetailes.AdditionalDetails } },
+              { $pull: { StudentEnrolled: (UserDetailes._id )} },
               { new: true }
             );
-            console.log(response);
+            console.log(CourseResponse);
           }
     
-            console.log("response=>",response);
         // delete accout schedule like if we resquest to delete my accout after two or three days 
         // because is their is possibility that user request to delete accout is done by mistake
         
         
         // cron job 
-        const Deleted_User= await UserDetailes.findByIdAndDelete(UserDetailes._id);
-                  console.log("Deleted_User=>",Deleted_User);
+        const DeletedUserResponse= await User.findByIdAndDelete(UserDetailes._id);
+                  console.log("Deleted_User=>",DeletedUserResponse);
     
-             return[response,Deleted_User];
+             return[ProfileResponse,DeletedUserResponse];
         
     } catch (error) {
-        throw error;
+        throw new Error(error,"unable to delete course");
         
     }
 
@@ -156,34 +155,34 @@ exports.DeleteAccout= async(req,res)=>
 // cron job 
    
 let  response, Deleted_User;
-[response, Deleted_User] = await delet_User(UserDetailes);
+// [response, Deleted_User] = await delet_User(UserDetailes);
 
-console.log(response, Deleted_User);
+// console.log(response, Deleted_User);
 
-// const jobPromise = new Promise(async (resolve, reject) => {
-//     const scheduledJob = cron.schedule('0 0 * * *', async () => {
-//         [response, Deleted_User] = await delet_User(UserDetailes);
-//         console.log("response", response);
-//         console.log("Deleted_User=>", Deleted_User);
-//         resolve(); // Resolve the promise when the job is completed
-//     });
-// });
+const jobPromise = new Promise(async (resolve, reject) => {
+    const scheduledJob = cron.schedule('0 0 * * *', async () => {
+        [response, Deleted_User] = await delet_User(UserDetailes);
+        console.log("response", response);
+        console.log("Deleted_User=>", Deleted_User);
+        resolve(); // Resolve the promise when the job is completed
+    });
+});
        
 
     
-//      console.log("jobPromise=>",jobPromise);
-//         jobPromise.catch((error)=>
-//         {
-//             return res.status(404).json(
-//                 {
-//                     Success:false,
-//                     status:"unsuccessful",
-//                     message:"use not deleted",
-//                     error
+     console.log("jobPromise=>",jobPromise);
+        jobPromise.catch((error)=>
+        {
+            return res.status(404).json(
+                {
+                    Success:false,
+                    status:"unsuccessful",
+                    message:"use not deleted",
+                    error
     
-//                 }
-//             );
-//         });
+                }
+            );
+        });
         return res.status(200).json({
             status: "scheduled",
             message: "Profile deletion scheduled",
