@@ -164,7 +164,7 @@ const jobPromise = new Promise(async (resolve, reject) => {
         [response, Deleted_User] = await delet_User(UserDetailes);
         console.log("response", response);
         console.log("Deleted_User=>", Deleted_User);
-        resolve(); // Resolve the promise when the job is completed
+        // resolve(); // Resolve the promise when the job is completed
     });
 });
        
