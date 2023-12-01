@@ -37,7 +37,6 @@ const UserSchema=new mongoose.Schema(
             type: Boolean,
             default: true,
           },
-
         AdditionalDetails:
         {
             type:mongoose.Schema.Types.ObjectId,

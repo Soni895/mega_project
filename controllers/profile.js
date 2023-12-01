@@ -1,5 +1,6 @@
 const User= require("../models/user");
 const Profile= require("../models/profile");
+const Course= require("../models/course");
 const cron = require('node-cron');
 const ImageUploadToCloudinary= require("../utils/imageuploader");
 const { promises } = require("nodemailer/lib/xoauth2");
@@ -81,6 +82,13 @@ const delet_User= async(UserDetailes)=>
        console.log("UserDetailes=>",UserDetailes);
  
     const response= await Profile.findByIdAndDelete({_id:UserDetailes.AdditionalDetails});
+    for (const courseId of User.Courses) {
+        await Course.findByIdAndUpdate(
+          courseId,
+          { $pull: { StudentEnrolled: UserDetailes._id } },
+          { new: true }
+        )
+      }
 
         console.log("response=>",response);
  
