@@ -18,7 +18,7 @@ async function Sendotp(Email,otp)
         const title= "verification code";
      
         const response= await MailSender(Email,title,OtpEmail(otp));
-        console.log("response==>",response);
+        console.log("response 21==>",response);
            return response;
     } catch (error) {
         console.log("error while sending mail\n",error);
@@ -70,17 +70,19 @@ exports.SendOtp=async(req,res)=>
     {
          Otp = otpGenerator.generate(6, { digits: true })
         //  +uniqueId;
-         isuniqueotp = await Otp.findOne({Otp:Otp});
+         isuniqueotp = await otp.findOne({Otp:Otp});
     }
 
     // check if user already exist
     console.log(Email);
 
-    const isprestent=await otp.find({Email});
+    const isprestent=await otp.findOne({Email});
 
-    console.log("Is User Present: " + isprestent)
+    console.log("Is User Present: " + isprestent);
+    const OtpInfo=isprestent?.OtpInfo?.Otp;
+    console.log("otpinfo 83=>",OtpInfo);
     
-    if(isprestent.OtpInfo)
+    if(OtpInfo)
     {
         
 
@@ -97,22 +99,28 @@ exports.SendOtp=async(req,res)=>
     
        return  res.status(200).json(
             {
-                "message" : "User already present! OTP Updated",
+                "message" : "User already present!",
                 updatedotp,
                 response
             }
         )
     }
     const otpPayload={Email,OtpInfo:{ Otp}};
-    const response= await otp.create(otpPayload);
-    console.log("response=>",response);
+    let  Otp_response;
+    if(isprestent){
+         Otp_response= await otp.findOneAndUpdate({Email},{OtpInfo:{ Otp}},{new:true});
+    }
+
+
+    Otp_response= await otp.create(otpPayload);
+    console.log("Otp_response=>",Otp_response);
     res.status(200).json(
         {
             status:true,
-            response,
+            Otp_response,
             Otp,
             otpPayload,
-            // uniqueId,
+            isuniqueotp,
             message:"Otp send Successful",
         }
     )
