@@ -152,23 +152,8 @@ const jobPromise = new Promise(async (resolve, reject) => {
        
 
     
-           console.log("jobPromise=>",jobPromise);
-        jobPromise.then(()=>
-        {
-          
-            return res.status(200).json({
-                status: "scheduled",
-                message: "Profile deletion scheduled",
-                Id,
-                UserDetailes,
-                // scheduledJob,
-                response,
-                Deleted_User,
-                jobPromise
-            
-            });
-
-        }).catch((error)=>
+     console.log("jobPromise=>",jobPromise);
+        jobPromise.catch((error)=>
         {
             return res.status(404).json(
                 {
@@ -179,7 +164,18 @@ const jobPromise = new Promise(async (resolve, reject) => {
     
                 }
             );
-        })
+        });
+        return res.status(200).json({
+            status: "scheduled",
+            message: "Profile deletion scheduled",
+            Id,
+            UserDetailes,
+            // scheduledJob,
+            response,
+            Deleted_User,
+            jobPromise
+        
+        });
       
       
 
