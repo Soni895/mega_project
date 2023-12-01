@@ -218,7 +218,7 @@ console.log( AccountType,
                     status:"Unsuccessful",
                     message:"user not found please signup"
                 });
-            }else if(Otp!==recentotp[0].OtpInfo.Otp)
+            }else if(Otp!==recentotp[0]?.OtpInfo.Otp)
             {
                 return res.status(400).json(
                     {
