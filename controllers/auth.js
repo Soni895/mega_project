@@ -76,11 +76,11 @@ exports.SendOtp=async(req,res)=>
     // check if user already exist
     console.log(Email);
 
-    const isprestent=await otp.find({Email}).count();
+    const isprestent=await otp.find({Email});
 
     console.log("Is User Present: " + isprestent)
     
-    if(isprestent)
+    if(isprestent.OtpInfo)
     {
         
 

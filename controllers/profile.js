@@ -79,28 +79,36 @@ exports.UpdateProfile= async(req,res)=>
 
 const delet_User= async(UserDetailes)=>
 {
-       console.log("UserDetailes=>",UserDetailes);
+    try {
+        console.log("UserDetailes=>",UserDetailes);
  
-    const response= await Profile.findByIdAndDelete({_id:UserDetailes.AdditionalDetails});
-    for (const courseId of User.Courses) {
-        await Course.findByIdAndUpdate(
-          courseId,
-          { $pull: { StudentEnrolled: UserDetailes.AdditionalDetails } },
-          { new: true }
-        )
-      }
-
-        console.log("response=>",response);
- 
-    // delete accout schedule like if we resquest to delete my accout after two or three days 
-    // because is their is possibility that user request to delete accout is done by mistake
+        const response= await Profile.findByIdAndDelete({_id:UserDetailes.AdditionalDetails});
+        console.log(response);
+        for (const courseId of User.Courses) {
+            console.log(courseId);
+           const response= await Course.findByIdAndUpdate(
+              courseId,
+              { $pull: { StudentEnrolled: UserDetailes.AdditionalDetails } },
+              { new: true }
+            );
+            console.log(response);
+          }
     
+            console.log("response=>",response);
+        // delete accout schedule like if we resquest to delete my accout after two or three days 
+        // because is their is possibility that user request to delete accout is done by mistake
+        
+        
+        // cron job 
+        const Deleted_User= await UserDetailes.findByIdAndDelete(UserDetailes._id);
+                  console.log("Deleted_User=>",Deleted_User);
     
-    // cron job 
-    const Deleted_User= await User.findByIdAndDelete(UserDetailes._id);
-              console.log("Deleted_User=>",Deleted_User);
-
-         return[response,Deleted_User];
+             return[response,Deleted_User];
+        
+    } catch (error) {
+        throw error;
+        
+    }
 
     
 }
@@ -148,31 +156,34 @@ exports.DeleteAccout= async(req,res)=>
 // cron job 
    
 let  response, Deleted_User;
+[response, Deleted_User] = await delet_User(UserDetailes);
 
-const jobPromise = new Promise(async (resolve, reject) => {
-    const scheduledJob = cron.schedule('0 0 * * *', async () => {
-        [response, Deleted_User] = await delet_User(UserDetailes);
-        console.log("response", response);
-        console.log("Deleted_User=>", Deleted_User);
-        resolve(); // Resolve the promise when the job is completed
-    });
-});
+console.log(response, Deleted_User);
+
+// const jobPromise = new Promise(async (resolve, reject) => {
+//     const scheduledJob = cron.schedule('0 0 * * *', async () => {
+//         [response, Deleted_User] = await delet_User(UserDetailes);
+//         console.log("response", response);
+//         console.log("Deleted_User=>", Deleted_User);
+//         resolve(); // Resolve the promise when the job is completed
+//     });
+// });
        
 
     
-     console.log("jobPromise=>",jobPromise);
-        jobPromise.catch((error)=>
-        {
-            return res.status(404).json(
-                {
-                    Success:false,
-                    status:"unsuccessful",
-                    message:"use not deleted",
-                    error
+//      console.log("jobPromise=>",jobPromise);
+//         jobPromise.catch((error)=>
+//         {
+//             return res.status(404).json(
+//                 {
+//                     Success:false,
+//                     status:"unsuccessful",
+//                     message:"use not deleted",
+//                     error
     
-                }
-            );
-        });
+//                 }
+//             );
+//         });
         return res.status(200).json({
             status: "scheduled",
             message: "Profile deletion scheduled",
@@ -181,7 +192,7 @@ const jobPromise = new Promise(async (resolve, reject) => {
             // scheduledJob,
             response,
             Deleted_User,
-            jobPromise
+            // jobPromise
         
         });
       
