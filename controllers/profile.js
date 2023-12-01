@@ -85,7 +85,7 @@ const delet_User= async(UserDetailes)=>
     for (const courseId of User.Courses) {
         await Course.findByIdAndUpdate(
           courseId,
-          { $pull: { StudentEnrolled: UserDetailes._id } },
+          { $pull: { StudentEnrolled: UserDetailes.AdditionalDetails } },
           { new: true }
         )
       }
