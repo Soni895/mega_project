@@ -14,7 +14,7 @@ router.get("/getallUserDetailes", Auth, GetallUserDetailes);
 
 // Get Enrolled Courses
 router.put("/UpdateDisplayPicture", Auth, UpdateDisplayPicture); 
-router.get("/getEnrolledCourses", Auth, GetEnrolledCourses);         //  verify pending    
-router.get("/instructorDashboard", Auth, IsInstructor, InstructorDashboard);    // pending 
+router.get("/GetEnrolledCourses", Auth, GetEnrolledCourses);         //  verify pending    
+router.get("/InstructorDashboard", Auth, IsInstructor, InstructorDashboard);    // pending 
 
 module.exports = router;

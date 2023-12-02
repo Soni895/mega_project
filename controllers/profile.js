@@ -334,9 +334,29 @@ exports.GetEnrolledCourses = async (req, res) => {
 exports.InstructorDashboard= async (req,res)=>
 {
     try {
-        
-    } catch (error) {
-        
-    }
+        const courseDetails = await Course.find({ Instructor: req.User.Id })
+    
+        const courseData = courseDetails.map((course) => {
+          const totalStudentsEnrolled = course.StudentEnrolled.length
+          const totalAmountGenerated = totalStudentsEnrolled * course.Price
+    
+          // Create a new object with the additional fields
+          const courseDataWithStats = {
+            _id: course._id,
+            courseName: course.courseName,
+            courseDescription: course.courseDescription,
+            // Include other course properties as needed
+            totalStudentsEnrolled,
+            totalAmountGenerated,
+          }
+    
+          return courseDataWithStats
+        })
+    
+        res.status(200).json({ courses: courseData })
+      } catch (error) {
+        console.error(error)
+        res.status(500).json({ message: "Server Error" })
+      }
 
 }
