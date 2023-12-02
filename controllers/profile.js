@@ -229,7 +229,7 @@ exports.GetallUserDetailes= async (req,res)=>
 {
     try {
         const {id}=req.User;
-        const  UserDetailes= await User.findById(id).populate("AdditionalDetails").exec();
+        const  UserDetailes= await User.findById(id).populate("AdditionalDetails").exec() ;
         if(!id)
         {
             return res.status(404).json(
