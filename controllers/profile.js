@@ -81,6 +81,12 @@ const delet_User= async(UserDetailes)=>
 {
     try {
         console.log("UserDetailes=>",UserDetailes);
+
+
+         // Delete Assosiated Profile with the User
+    // await Profile.findByIdAndDelete({
+    //     _id: new mongoose.Types.ObjectId(user.additionalDetails),
+    //   });
  
         const ProfileResponse= await Profile.findByIdAndDelete({_id:(UserDetailes.AdditionalDetails)});
         console.log(ProfileResponse);
