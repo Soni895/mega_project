@@ -264,7 +264,7 @@ console.log( AccountType,
                 Gender:null
             });
             console.log("profile=>",profile);
-            const Payload= new User(
+            const Payload= new  User(
                 {
                     AccountType,
                     Email,
