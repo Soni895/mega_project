@@ -10,11 +10,11 @@ const {InstructorDashboard}=require("../controllers/profile");   //pending
 //                             Profile routes
 router.delete("/DeleteAccout",Auth, DeleteAccout);                           
 router.put("/updateProfile", Auth, UpdateProfile);
-router.get("/getallUserDetailes", Auth, GetallUserDetailes);
+router.get("/getallUserDetailes", Auth, GetallUserDetailes);   
 
 // Get Enrolled Courses
-router.get("/getEnrolledCourses", Auth, GetEnrolledCourses);             
-router.put("/UpdateDisplayPicture", Auth, UpdateDisplayPicture);     
+router.put("/UpdateDisplayPicture", Auth, UpdateDisplayPicture); 
+router.get("/getEnrolledCourses", Auth, GetEnrolledCourses);         //  verify pending    
 router.get("/instructorDashboard", Auth, IsInstructor, InstructorDashboard);    // pending 
 
 module.exports = router;

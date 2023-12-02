@@ -4,6 +4,7 @@ const Course= require("../models/course");
 const cron = require('node-cron');
 const ImageUploadToCloudinary= require("../utils/imageuploader");
 const { promises } = require("nodemailer/lib/xoauth2");
+require("dotenv").config();
 
 //   update delete
 
@@ -270,13 +271,14 @@ exports.GetallUserDetailes= async (req,res)=>
 
 exports.UpdateDisplayPicture = async (req, res) => {
     try {
-      const displayPicture = req.files.displayPicture
+      const DisplayPicture = req.files.DisplayPicture
       const userId = req.User.id;
       console.log("User=>",req.User);
-
+      console.log(DisplayPicture);
+      console.log(process.env.Folder_name);
       const image = await ImageUploadToCloudinary(
-        displayPicture,
-        process.env.FOLDER_NAME,
+        DisplayPicture,
+        process.env.Folder_name,
         1000,
         1000
       );
@@ -296,6 +298,7 @@ exports.UpdateDisplayPicture = async (req, res) => {
       return res.status(500).json({
         success: false,
         message: error.message,
+        error,
       })
     }
 };
