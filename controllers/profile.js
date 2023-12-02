@@ -18,7 +18,7 @@ exports.UpdateProfile= async(req,res)=>
         // update profile
         //return respose
 
-        const {ContactNumber,DateOfBirth="",Gender,About=""}=req.body;
+        const {ContactNumber,DateOfBirth="",Gender,About="",FirstName,LastName}=req.body;
         const {id}=req.User;
         console.log(ContactNumber,DateOfBirth,Gender,About,id);
         if(!ContactNumber||!Gender||!id)
@@ -32,6 +32,8 @@ exports.UpdateProfile= async(req,res)=>
                 }
             );
         };
+        const date = Date.parse(DateOfBirth);
+        console.log("date=>",date);
 
     const UserDetails= await User.findById(id).populate("AdditionalDetails").exec();
         console.log("UserDetailes=>",UserDetails);
@@ -45,13 +47,16 @@ exports.UpdateProfile= async(req,res)=>
         const UpdatedProfile=  await  Profile.findByIdAndUpdate(ProfileId,
             {
                 ContactNumber,
-                DateOfBirth,
+                DateOfBirth:date,
                 Gender,
                 About,
             },{new:true});
+
+            const UpdatedUser= await User.findByIdAndUpdate(UserDetails._id,{FirstName,LastName},{new:true});
             
 
-            console.log("UpdatedProfile=>",UpdatedProfile);
+            console.log("UpdatedProfile  56=>",UpdatedProfile);
+            console.log("UpdatedUser 57=>",UpdatedUser);
 
             return res.status(200).json(
                 {
@@ -60,7 +65,8 @@ exports.UpdateProfile= async(req,res)=>
                     ProfileId,
                     UserDetails,
                     ProfileDetailes,
-                    UpdatedProfile
+                    UpdatedProfile,
+                    UpdatedUser
                 }
             );
      

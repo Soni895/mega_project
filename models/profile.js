@@ -8,7 +8,7 @@ const ProfileSchema=new mongoose.Schema(
         },
         DateOfBirth:
         {
-            type:String,
+            type:Date,
         },
         About:
         {
