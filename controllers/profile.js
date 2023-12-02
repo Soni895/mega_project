@@ -228,9 +228,9 @@ const jobPromise = new Promise(async (resolve, reject) => {
 exports.GetallUserDetailes= async (req,res)=>
 {
     try {
-        const {id}=req.User;
-        const  UserDetailes= await User.findById(id).populate("AdditionalDetails").exec() ;
-        if(!id)
+        const {Id}=req.User;
+        const  UserDetailes= await User.findById(Id).populate("AdditionalDetails").exec() ;
+        if(!Id)
         {
             return res.status(404).json(
                 {
