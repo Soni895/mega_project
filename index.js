@@ -37,10 +37,10 @@ app.listen(port, () => {
 // mount the route
 
 app.use("/api/v1/Course", CourseRoutes);    
-app.use("/api/v1/Profile", ProfileRoutes);     //  one route pending get all enrolled courses   //completed
+app.use("/api/v1/Profile", ProfileRoutes); //6 routes     //  one route pending get all enrolled courses   //completed
 app.use("/api/v1/Payment", PaymentRoutes);   //pending
-app.use("/api/v1/Auth", UserRoutes);       //completed
-app.use("/api/v1/Contact", ContactUsRoutes);   //completed
+app.use("/api/v1/Auth", UserRoutes);  //6 routes                 //completed
+app.use("/api/v1/Contact", ContactUsRoutes);  // 1 routes     //completed
 
 app.get("*", (req, res) => {
   res.send("hi");
