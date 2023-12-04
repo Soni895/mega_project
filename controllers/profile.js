@@ -343,8 +343,8 @@ exports.InstructorDashboard= async (req,res)=>
           // Create a new object with the additional fields
           const courseDataWithStats = {
             _id: course._id,
-            courseName: course.courseName,
-            courseDescription: course.courseDescription,
+            courseName: course.CourseName,
+            courseDescription: course.CourseDescription,
             // Include other course properties as needed
             totalStudentsEnrolled,
             totalAmountGenerated,
