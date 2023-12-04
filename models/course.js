@@ -42,7 +42,7 @@ const CourseSchema = new mongoose.Schema({
     required: true,
   },
 
-  Thumbnail: {
+  Thumbmail: {
     type: String,
     required: true,
   },
@@ -70,6 +70,6 @@ const CourseSchema = new mongoose.Schema({
   Instructions: {
     type: [String],
   },
-});
+},{ timestamps: true });
 const Course = mongoose.model("Course", CourseSchema);
 module.exports = Course;
