@@ -4,7 +4,7 @@ const router= express.Router();
 const {Auth,IsInstructor}= require("../middlewares/auth");
 const {GetallUserDetailes,DeleteAccout,UpdateProfile,UpdateDisplayPicture,GetEnrolledCourses}= require("../controllers/profile");
 
-const {InstructorDashboard}=require("../controllers/profile");   //pending
+const {InstructorDashboard}=require("../controllers/profile");   //completed
 // should be maked
  
 //                             Profile routes
@@ -14,7 +14,6 @@ router.get("/getallUserDetailes", Auth, GetallUserDetailes);
 
 // Get Enrolled Courses
 router.put("/UpdateDisplayPicture", Auth, UpdateDisplayPicture); 
-router.get("/GetEnrolledCourses", Auth, GetEnrolledCourses);         //  verify pending    
-router.get("/InstructorDashboard", Auth, IsInstructor, InstructorDashboard);    // pending 
-
+router.get("/GetEnrolledCourses", Auth, GetEnrolledCourses);         //   pending    
+router.get("/InstructorDashboard", Auth, IsInstructor, InstructorDashboard);    //completed
 module.exports = router;
