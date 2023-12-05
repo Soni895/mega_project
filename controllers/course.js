@@ -8,6 +8,7 @@ const ImageUploadToCloudinary = require("../utils/imageuploader");
 
 exports.CreateCourse = async (req, res) => {
   try {
+    
     // data
     // File
     // validation
