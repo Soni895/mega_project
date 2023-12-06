@@ -25,7 +25,7 @@ router.post("/CreateCourse",Auth,IsInstructor,CreateCourse);    // completed
 //Add a Section to a Course
 router.post("/CreateSection",Auth,IsInstructor,CreateSection);   //completed
 // Update a Section
-router.post("/UpdateSection",Auth,IsInstructor,UpdateSection);
+router.post("/UpdateSection",Auth,IsInstructor,UpdateSection);    //completed
 // Delete a Section
 router.post("/DeleteSection/:SectionId",Auth,IsInstructor,DeleteSection);   
 router.post('/UpdateSubSection',Auth,IsInstructor,UpdateSubSection);
