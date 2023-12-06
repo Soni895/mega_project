@@ -27,7 +27,12 @@ exports.CreateCourse = async (req, res) => {
     } = req.body;
     const Thumbmail = req.files.Thumbmail;
    
+// Convert the tag and instructions from stringified Array to Array
+const _Tag = JSON.parse(Tag);
+const _instructions = JSON.parse(Instructions);
 
+console.log("tag", _Tag)
+console.log("instructions", _instructions)
     console.log(
       "CourseName,CourseDescription,Price,Category,WhatYouWillLearn,Status,Instructions==>",
       CourseName,
@@ -47,7 +52,7 @@ exports.CreateCourse = async (req, res) => {
       !Category ||
       !Price ||
       !CourseDescription ||
-      !Thumbmail || !Status || !Instructions
+      !Thumbmail  || !Instructions
     ) {
       return res.status(401).json({
         status: "Unsuccessful",
@@ -75,6 +80,19 @@ exports.CreateCourse = async (req, res) => {
         success: false,
         message: "Instrctor detailes not found",
       });
+    }
+    if (!Status || Status === undefined) {
+      Status = "Draft"
+    }
+     // Check if the user is an instructor
+     const instructorDetails = await User.findById(UserId, {
+      accountType: "Instructor",
+    })
+    if (!instructorDetails) {
+      return res.status(404).json({
+        success: false,
+        message: "Instructor Details Not Found",
+      })
     }
 
     // check given Category is valid or not
@@ -126,7 +144,6 @@ exports.CreateCourse = async (req, res) => {
     )
       .populate("Courses")
       .exec();
-
     console.log("Updated_Course=>", Updated_Course);
 
     // update Category schema todo.
