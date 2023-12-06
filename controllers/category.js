@@ -2,6 +2,10 @@ const { validatePaymentVerification } = require("razorpay/dist/utils/razorpay-ut
 const category = require("../models/category");
 
 //    add functionality if category is present dont mkae new category
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max)
+  }
+
 
 exports.CreateCategory=async (req,res)=>
 {
@@ -91,40 +95,91 @@ exports.CategoryPageDetailes= async(req,res)=>
     //  gett top selling course
 
     const {CategoryId}=req.body;
-    const Selectcategory= await category.findById(CategoryId).populate("Course")
+    const Selectcategory= await category.findById(CategoryId).populate({
+        path: "Course",
+        match: { Status: "Published" },
+        populate: "RatingAndREview",
+    })
     .exec();
     console.log("CategoryId=>",CategoryId,"Selectcategory=>",Selectcategory);
 
+
+    // if category not found
     if(!Selectcategory)
     {
         return res.status(404).json(
             {
-                sucecss:true,
-                Message:  "data not found",
+                sucecss: false,
+                Message:  "Category not found",
             }
         )
     }
+
+   // Handle the case when there are no courses
+    if (Selectcategory.Course.length === 0) {
+        console.log("No courses found for the selected category.")
+        return res.status(404).json({
+          success: false,
+          message: "No courses found for the selected category.",
+        })
+      }
     
-      // get courses for different catagory
+
+    
+    // get courses for different catagory
   const DifferentCategory = await category.find({
     _id: { $ne: CategoryId }
-  }).populate("Course").exec();
+  }).populate({
+    path: "Course",
+    match: { Status: "Published" },
+    populate: "RatingAndREview",
+})
+.exec();
 
       console.log("DifferentCategory=>",DifferentCategory);
+
+
+
+      let RandomCategory = await category.findOne(
+        DifferentCategory[getRandomInt(categoriesExceptSelected.length)]
+          ._id
+      ).populate({
+        path: "Course",
+        match: { Status: "Published" },
+        populate: "RatingAndREview",
+    })
+    .exec();
     //   gett 10 top selling course   ***********home work************
+
+     // Get top-selling courses across all categories
+     const AllCategory= await category.find({}).populate({
+        path: "Course",
+        match: { Status: "Published" },
+        populate: "RatingAndREview",
+    })
+    .exec();
+
+    const AllCourses = AllCategory.flatMap((category) => category.Courses)
+    const MostSellingCourses = AllCourses
+      .sort((a, b) => b.sold - a.sold)
+      .slice(0, 10);
 
     return res.status(200).json({
         Success:true,
         Status:"successful",
         DifferentCategory,
-        Selectcategory
+        Selectcategory,
+        RandomCategory,
+        AllCourses,
+        MostSellingCourses
+        
     })
     } catch (error) {
         return res.status(500).json(
             {
                 status:false,
                 error,
-               Message:"not find course of this category",
+               Message:"Internal server error in category",
 
             }
           )  
