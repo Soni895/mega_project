@@ -7,23 +7,23 @@ const {Auth}= require("../middlewares/auth");
 
 //                       Authentication routes
 // Route for user login
-router.post("/login", Login)
+router.post("/Login", Login)
 
 // Route for user signup
-router.post("/signup", SignUp)
+router.post("/Signup", SignUp)
 
 // Route for sending OTP to the user's email
-router.post("/sendotp", SendOtp)
+router.post("/Sendotp", SendOtp)
 
 // Route for Changing the password
-router.post("/changepassword", Auth, ChangePassword);
+router.post("/Changepassword", Auth, ChangePassword);
 
 //   Reset Password
 // Route for generating a reset password token
-router.post("/reset-password-token", ResetPasswordToken);
+router.post("/Reset-Password-Token", ResetPasswordToken);
 
 
 // Route for resetting user's password after verification
-router.post("/reset-password", ResetPassword);
+router.post("/Reset-Password", ResetPassword);
 
 module.exports = router;

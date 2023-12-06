@@ -9,7 +9,7 @@ const {InstructorDashboard}=require("../controllers/profile");   //completed
  
 //                             Profile routes
 router.delete("/DeleteAccout",Auth, DeleteAccout);                           
-router.put("/updateProfile", Auth, UpdateProfile);
+router.put("/UpdateProfile", Auth, UpdateProfile);
 router.get("/getallUserDetailes", Auth, GetallUserDetailes);   
 
 // Get Enrolled Courses

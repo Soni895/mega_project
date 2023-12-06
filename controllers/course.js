@@ -8,7 +8,6 @@ const ImageUploadToCloudinary = require("../utils/imageuploader");
 
 exports.CreateCourse = async (req, res) => {
   try {
-    
     // data
     // File
     // validation
@@ -16,10 +15,12 @@ exports.CreateCourse = async (req, res) => {
     const {
       CourseName,
       CourseDescription,
-      Price,
-      Category,
-      Tag,
       WhatYouWillLearn,
+      Price,
+      Tag,                 // type array
+      Category, 
+      Status,                    //  ["Draft", "Published"],
+      Instructions,           // type array
     } = req.body;
     const Thumbnail = req.files.Thumbnail;
 
