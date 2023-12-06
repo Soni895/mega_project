@@ -23,7 +23,7 @@ const {GetAllRating,GetAverageRating,Createrating} =require("../controllers/rati
 router.post("/CreateCourse",Auth,IsInstructor,CreateCourse);    // completed
 
 //Add a Section to a Course
-router.post("/CreateSection",Auth,IsInstructor,CreateSection);
+router.post("/CreateSection",Auth,IsInstructor,CreateSection);   //completed
 // Update a Section
 router.post("/PpdateSection",Auth,IsInstructor,UpdateSection);
 // Delete a Section

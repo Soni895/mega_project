@@ -32,6 +32,9 @@ exports.CreateSection= async (req,res)=>
         $push:{CourseContent:NewSection._id}
     }, {new:true}).populate({
         path: "CourseContent",
+        populate: {
+            path: "SubSection",
+          },
     })
     .exec();
 
