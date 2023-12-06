@@ -4,7 +4,7 @@ const router= express.Router();
 // Importing Middlewares
 const {Auth,IsInstructor, IsStudent, IsAdmin }=require("../middlewares/auth");
 // Course Controllers Import
-const {GetCourseDetails,ShowAllCourses,CreateCourse}= require("../controllers/course");
+const {GetCourseDetails,ShowAllCourses,CreateCourse,EditCourse,DeleteCourse}= require("../controllers/course");
 // Categories Controllers Import
 const{CategoryPageDetailes,GetAllCategory,CreateCategory}= require("../controllers/category");
 // Sections Controllers Import
@@ -22,7 +22,9 @@ const {GetAllRating,GetAverageRating,Createrating} =require("../controllers/rati
 
 router.post("/CreateCourse",Auth,IsInstructor,CreateCourse);    // completed
 // Edit Course routes
-router.post("/editCourse", Auth, IsInstructor, EditCourse)                        //pending
+router.put("/EditCourse", Auth, IsInstructor, EditCourse)  ;                      //pending
+// Delete a Course
+router.delete("/DeleteCourse", DeleteCourse); //  complete verfi pending
 
 //Add a Section to a Course
 router.post("/CreateSection",Auth,IsInstructor,CreateSection);   //completed

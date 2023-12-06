@@ -356,7 +356,7 @@ exports.Login= async (req,res)=>
                   Email:user.Email,
                   id:user._id,
                   Role:user.AccountType
-  
+
               }
              
               const  token=jwt.sign(payload,jwt_secret,
