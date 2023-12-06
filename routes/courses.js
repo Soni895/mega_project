@@ -20,7 +20,7 @@ const {GetAllRating,GetAverageRating,Createrating} =require("../controllers/rati
 
 //                              Course routes
 
-router.post("/CreateCourse",Auth,IsInstructor,CreateCourse);   
+router.post("/CreateCourse",Auth,IsInstructor,CreateCourse);    // completed
 
 //Add a Section to a Course
 router.post("/CreateSection",Auth,IsInstructor,CreateSection);
@@ -43,7 +43,7 @@ router.post("/GetCourseDetails",Auth,GetCourseDetails);
     
 router.post("/createCategory", Auth, IsAdmin, CreateCategory);  //completed
 router.get("/GetAllCategory", GetAllCategory);                 //completed
-router.post("/CategoryPageDetailes", CategoryPageDetailes);                   // pending verify
+router.post("/CategoryPageDetailes", CategoryPageDetailes);                   //  verifyied
 
 
 //                           Rating and Review                               
