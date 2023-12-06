@@ -37,7 +37,7 @@ exports.CreateCategory=async (req,res)=>
           return res.status(200).json(
             {
                 status:true,
-                Message: "tag created Successfull",
+                Message: "category created Successfull",
                 Category_Deatils,
             }
           );
@@ -46,7 +46,7 @@ exports.CreateCategory=async (req,res)=>
         return res.status(500).json(
             {
                 status:false,
-                Message: "tag created  Unsuccessfull",
+                Message: "Category created  Unsuccessfull",
                 error,
             }
           )
@@ -79,7 +79,7 @@ exports.GetAllCategory= async (req,res)=>
 
 }
 
-//  tag page detailes
+//  category page detailes
 
 exports.CategoryPageDetailes= async(req,res)=>
 {
