@@ -141,7 +141,7 @@ exports.CategoryPageDetailes= async(req,res)=>
 
 
       let RandomCategory = await category.findOne(
-        DifferentCategory[getRandomInt(categoriesExceptSelected.length)]
+        DifferentCategory[getRandomInt(DifferentCategory.length)]
           ._id
       ).populate({
         path: "Course",
@@ -179,7 +179,8 @@ exports.CategoryPageDetailes= async(req,res)=>
             {
                 status:false,
                 error,
-               Message:"Internal server error in category",
+              
+               message:error.message
 
             }
           )  
