@@ -12,6 +12,9 @@ exports.CreateCourse = async (req, res) => {
     // File
     // validation
     // Category
+
+
+
     const {
       CourseName,
       CourseDescription,
@@ -23,15 +26,19 @@ exports.CreateCourse = async (req, res) => {
       Instructions,           // type array
     } = req.body;
     const Thumbnail = req.files.Thumbnail;
+   
 
     console.log(
-      "CourseName,CourseDescription,Price,Category,WhatYouWillLearn==>",
+      "CourseName,CourseDescription,Price,Category,WhatYouWillLearn,Status,Instructions==>",
       CourseName,
       CourseDescription,
       Price,
       Category,
-      WhatYouWillLearn
+      WhatYouWillLearn,
+    Status,Instructions
     );
+
+    console.log("User=>",User);
 
     //validation
     if (
@@ -40,7 +47,7 @@ exports.CreateCourse = async (req, res) => {
       !Category ||
       !Price ||
       !CourseDescription ||
-      !Thumbnail
+      !Thumbnail || !Status || !Instructions
     ) {
       return res.status(401).json({
         status: "Unsuccessful",
@@ -49,6 +56,7 @@ exports.CreateCourse = async (req, res) => {
       });
     }
     // check is instructor
+
     const UserId = req.User.id;
 
     console.log("UserId=>", UserId);
@@ -97,6 +105,9 @@ exports.CreateCourse = async (req, res) => {
       Instructor: InstructorDetails._id,
       Category: CategoryDetailes._id,
       Tag,
+      Status,
+      Instructions,
+      Category:CategoryDetailes._id,
     });
 
     console.log("NewCourse=>", NewCourse);

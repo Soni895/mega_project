@@ -28,17 +28,17 @@ exports.CreateCategory=async (req,res)=>
                 }); 
           }
 
-          const Tag_Deatils= await category.create(
+          const Category_Deatils= await category.create(
             {
                 Name,Description
             }
           );
-          console.log(Tag_Deatils);
+          console.log(Category_Deatils);
           return res.status(200).json(
             {
                 status:true,
                 Message: "tag created Successfull",
-                Tag_Deatils,
+                Category_Deatils,
             }
           );
         
@@ -62,7 +62,7 @@ exports.GetAllCategory= async (req,res)=>
         return res.status(200).json({
             Success:true,
             Status:"successful",
-            Message:"find All tag successful",
+            Message:"find All category successful",
             response,
         });
 
