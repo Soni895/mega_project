@@ -21,11 +21,11 @@ exports.CreateCourse = async (req, res) => {
       WhatYouWillLearn,
       Price,
       Tag,                 // type array
-      Category, 
+      Category,             //id
       Status,                    //  ["Draft", "Published"],
       Instructions,           // type array
     } = req.body;
-    const Thumbnail = req.files.Thumbnail;
+    const Thumbmail = req.files.Thumbmail;
    
 
     console.log(
@@ -38,7 +38,7 @@ exports.CreateCourse = async (req, res) => {
     Status,Instructions
     );
 
-    console.log("User=>",User);
+    console.log("User=>",req.User);
 
     //validation
     if (
@@ -47,7 +47,7 @@ exports.CreateCourse = async (req, res) => {
       !Category ||
       !Price ||
       !CourseDescription ||
-      !Thumbnail || !Status || !Instructions
+      !Thumbmail || !Status || !Instructions
     ) {
       return res.status(401).json({
         status: "Unsuccessful",
@@ -62,6 +62,8 @@ exports.CreateCourse = async (req, res) => {
     console.log("UserId=>", UserId);
 
     const InstructorDetails = await User.findById(UserId);
+    console.log(InstructorDetails._id);
+    console.log(InstructorDetails._id.toString());
 
     console.log("InstructorDetails=>", InstructorDetails);
 
@@ -89,7 +91,7 @@ exports.CreateCourse = async (req, res) => {
     //  upload image to cloudinary
 
     const ThumbnailImg = await ImageUploadToCloudinary(
-      Thumbnail,
+      Thumbmail,
       process.env.Folder_name
     );
     console.log("ThumbnailImg=>", ThumbnailImg);
@@ -101,7 +103,7 @@ exports.CreateCourse = async (req, res) => {
       CourseDescription,
       Price,
       WhatYouWillLearn,
-      Thumbnail: ThumbnailImg.secure_url,
+      Thumbmail: ThumbnailImg.secure_url,
       Instructor: InstructorDetails._id,
       Category: CategoryDetailes._id,
       Tag,
@@ -171,7 +173,7 @@ exports.ShowAllCourses = async (req, res) => {
       {
         CourseName: true,
         Price: true,
-        Thumbnail: true,
+        Thumbmail: true,
         Instructor: true,
         RatingAndREview: true,
         StudentEnrolled: true,
