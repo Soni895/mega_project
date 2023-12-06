@@ -269,3 +269,12 @@ exports.GetCourseDetails = async (req, res) => {
     });
   }
 };
+
+exports.EditCourse= async (req,res)=>
+{
+  try {
+    
+  } catch (error) {
+    
+  }
+}

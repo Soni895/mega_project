@@ -21,26 +21,32 @@ const {GetAllRating,GetAverageRating,Createrating} =require("../controllers/rati
 //                              Course routes
 
 router.post("/CreateCourse",Auth,IsInstructor,CreateCourse);    // completed
+// Edit Course routes
+router.post("/editCourse", Auth, IsInstructor, EditCourse)                        //pending
 
 //Add a Section to a Course
 router.post("/CreateSection",Auth,IsInstructor,CreateSection);   //completed
 // Update a Section
 router.post("/UpdateSection",Auth,IsInstructor,UpdateSection);    //completed
 // Delete a Section
-router.post("/DeleteSection/:SectionId",Auth,IsInstructor,DeleteSection);   
+router.post("/DeleteSection/:SectionId",Auth,IsInstructor,DeleteSection);
+
+// create a sub section to a Section
+router.post('/CreateSubsection',Auth,IsInstructor,CreateSubsection);
+// update sub section
 router.post('/UpdateSubSection',Auth,IsInstructor,UpdateSubSection);
 // Delete Sub Section
 router.post("/DeleteSubsection",Auth,IsInstructor,DeleteSubsection);  
-// Add a Sub Section to a Section
-router.post('/CreateSubsection',Auth,IsInstructor,CreateSubsection);
+
 // Get all Registered Courses
 router.get("/ShowAllCourses",Auth,ShowAllCourses);
 // Get Details for a Specific Courses
 router.post("/GetCourseDetails",Auth,GetCourseDetails); 
 
+
+
 //                            Category routes (Only by Admin)
 // Category can Only be Created by Admin
-    
 router.post("/createCategory", Auth, IsAdmin, CreateCategory);  //completed
 router.get("/GetAllCategory", GetAllCategory);                 //completed
 router.post("/CategoryPageDetailes", CategoryPageDetailes);                   //  verifyied
