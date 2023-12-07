@@ -4,7 +4,7 @@ const User = require("../models/user");
 const Section= require("../models/section");
 const SubSection=require("../models/SubSection")
 const ImageUploadToCloudinary = require("../utils/imageuploader");
-
+const { convertSecondsToDuration } = require("../utils/convertSecondsToDuration");
 // create Course
 // get all caurse
 
@@ -224,7 +224,7 @@ exports.GetCourseDetails = async (req, res) => {
 
     console.log("CourseId=>", CourseId);
     // find course detailed
-    const CourseDetailes = await Course.find({ _id: CourseId })
+    const CourseDetailes = await Course.findById({ _id: CourseId })
       .populate({
        path: "Instructor",
       populate:
@@ -257,11 +257,22 @@ exports.GetCourseDetails = async (req, res) => {
         message: `Could not find course with id: ${CourseId}`,
       });
     }
+
+    let totalDurationInSeconds = 0
+    CourseDetailes.CourseContent.forEach((content) => {
+      content.SubSection.forEach((subSection) => {
+        const timeDurationInSeconds = parseInt(subSection.TimeDuration);
+        totalDurationInSeconds += timeDurationInSeconds;
+      })
+    })
+
+    const totalDuration = convertSecondsToDuration(totalDurationInSeconds)
     return res.status(200).json({
       staus: "successful",
       Success: true,
       CourseDetailes,
       CourseId,
+      totalDuration
     });
   } catch (error) {
     return res.status(400).json({
