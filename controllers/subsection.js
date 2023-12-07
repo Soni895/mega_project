@@ -192,7 +192,7 @@ exports.DeleteSubsection= async (req,res)=>
                 }
             ) ;
         }
-    // kupdate section also
+    // update section also
 
       const is_present= await Section.findOne({ SubSection: { $in: [SubsectionId] } });
   console.log("is_present=>",is_present);
