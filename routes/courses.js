@@ -41,7 +41,7 @@ router.post('/UpdateSubSection',Auth,IsInstructor,UpdateSubSection);   //complet
 router.post("/DeleteSubsection",Auth,IsInstructor,DeleteSubsection);  // complted
 
 // Get all Registered Courses
-router.get("/ShowAllCourses",Auth,GetAllCourses);     //completed
+router.get("/GetAllCourses",Auth,GetAllCourses);     //completed
 // Get Details for a Specific Courses
 router.post("/GetCourseDetails",Auth,GetCourseDetails); 
 
