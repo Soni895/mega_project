@@ -24,7 +24,7 @@ router.post("/CreateCourse",Auth,IsInstructor,CreateCourse);    // completed
 // Edit Course routes
 router.put("/EditCourse", Auth, IsInstructor, EditCourse)  ;                      //pending
 // Delete a Course
-router.delete("/DeleteCourse", DeleteCourse); //  complete verfi pending
+router.delete("/DeleteCourse", DeleteCourse); //  complete verfied  
 
 //Add a Section to a Course
 router.post("/CreateSection",Auth,IsInstructor,CreateSection);   //completed
