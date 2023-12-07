@@ -140,8 +140,6 @@ const  Updated_Subsection= await subSection.save();
   
 console.log("Updated_Subsection=>",Updated_Subsection);
    
-
-  
    
     return res.status(200).json(
         {
