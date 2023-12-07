@@ -22,7 +22,7 @@ const {GetAllRating,GetAverageRating,Createrating} =require("../controllers/rati
 
 router.post("/CreateCourse",Auth,IsInstructor,CreateCourse);    // completed
 // Edit Course routes
-router.put("/EditCourse", Auth, IsInstructor, EditCourse)  ;                    //*****        pending           ***      
+router.put("/EditCourse", Auth, IsInstructor, EditCourse)  ;                      //*****        pending           ***      
 // Delete a Course
 router.delete("/DeleteCourse", DeleteCourse); //  complete verfied  
 
@@ -41,9 +41,9 @@ router.post('/UpdateSubSection',Auth,IsInstructor,UpdateSubSection);   //complet
 router.post("/DeleteSubsection",Auth,IsInstructor,DeleteSubsection);  // complted
 
 // Get all Registered Courses
-router.get("/GetAllCourses",Auth,GetAllCourses);     //completed
+router.get("/GetAllCourses",Auth,GetAllCourses);       //completed
 // Get Details for a Specific Courses
-router.post("/GetCourseDetails",Auth,GetCourseDetails); 
+router.post("/GetCourseDetails",Auth,GetCourseDetails);  // completed
 
 
 
