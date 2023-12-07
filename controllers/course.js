@@ -185,10 +185,10 @@ console.log("instructions", _instructions)
 
 // get all courses
 
-exports.ShowAllCourses = async (req, res) => {
+exports.GetAllCourses = async (req, res) => {
   try {
     const AllCourse = await Course.find(
-      {},
+      { Status: "Published" },
       {
         CourseName: true,
         Price: true,
