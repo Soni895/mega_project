@@ -176,7 +176,7 @@ exports.DeleteSubsection= async (req,res)=>
             {
                 Success:false,
                 status:"unsuccessful",
-                message:" subsection id not found",
+                message:" required all field",
             }
         ) ;
         }
@@ -188,11 +188,11 @@ exports.DeleteSubsection= async (req,res)=>
                 {
                     Success:false,
                     status:"unsuccessful",
-                    message:" subsection id not found",
+                    message:" subsection  not found",
                 }
             ) ;
         }
-    // delete from subsection also
+    // kupdate section also
 
       const is_present= await Section.findOne({ SubSection: { $in: [SubsectionId] } });
   console.log("is_present=>",is_present);

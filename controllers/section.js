@@ -1,5 +1,6 @@
 const Course = require("../models/course");
 const Section=require("../models/section");
+const SubSection= require("../models/SubSection");
 
 
 exports.CreateSection= async (req,res)=>
@@ -123,7 +124,9 @@ exports.DeleteSection=async (req,res)=>
     try {
         // fetech data
         // data validation
+        //delete subsection
         // delete section
+        //update course
         // return response
 
         const {SectionId}=req.params;
@@ -140,8 +143,19 @@ exports.DeleteSection=async (req,res)=>
             }
         ) 
         }
+
+        const section = await Section.findById(SectionId)
+       
+        if (!section) {
+          return res.status(404).json({
+            success: false,
+            message: "Section not found",
+          })
+        }
+        // Delete the associated subsections
+      const deleted_Subsection= await SubSection.deleteMany({ _id: { $in: section.SubSection } })
         const response= await Section.findByIdAndDelete(SectionId);
-        console.log("response=>",response);
+        console.log("deleted_Subsection=>",deleted_Subsection);
 
           if(!response)
           {
@@ -181,6 +195,7 @@ exports.DeleteSection=async (req,res)=>
                 status:"successful",
                 message:"Section Deleted Successful",
                 response, 
+                deleted_Subsection,
             }
         );
         

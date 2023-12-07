@@ -38,7 +38,7 @@ router.post('/CreateSubsection',Auth,IsInstructor,CreateSubsection);   //complte
 // update sub section
 router.post('/UpdateSubSection',Auth,IsInstructor,UpdateSubSection);   //completed
 // Delete Sub Section
-router.post("/DeleteSubsection",Auth,IsInstructor,DeleteSubsection);  
+router.post("/DeleteSubsection",Auth,IsInstructor,DeleteSubsection);  //
 
 // Get all Registered Courses
 router.get("/ShowAllCourses",Auth,ShowAllCourses);
