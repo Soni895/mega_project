@@ -226,12 +226,13 @@ exports.GetCourseDetails = async (req, res) => {
     // find course detailed
     const CourseDetailes = await Course.find({ _id: CourseId })
       .populate({
-        path: "Instructor",
-        populate: [
-          { path: "AdditionalDetails" }, // Populate 'AdditionalDetails' field within 'instructor'
-          { path: "Courses", populate: "CourseContent" }, // Populate 'Courses' field within 'instructor'
-      //  { path: 'CourseProgrss' },      // Populate 'CourseProgrss' field within 'instructor'
-        ],
+       path: "Instructor",
+      populate:
+      {
+         path: 'AdditionalDetails' ,
+        path: 'Courses' ,
+        populate:"CourseContent"
+      }
       })
       .populate({
         path: "CourseContent",
@@ -253,7 +254,7 @@ exports.GetCourseDetails = async (req, res) => {
       return res.status(400).json({
         success: false,
         status: "Unsuccessful",
-        message: "Course detailes not found",
+        message: `Could not find course with id: ${CourseId}`,
       });
     }
     return res.status(200).json({
@@ -266,7 +267,7 @@ exports.GetCourseDetails = async (req, res) => {
     return res.status(400).json({
       success: false,
       status: "Unsuccessful",
-      message: "unable to get course deatailes",
+      message: `Could not find course`,
       error,
     });
   }
