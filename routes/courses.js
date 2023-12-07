@@ -22,7 +22,7 @@ const {GetAllRating,GetAverageRating,Createrating} =require("../controllers/rati
 
 router.post("/CreateCourse",Auth,IsInstructor,CreateCourse);    // completed
 // Edit Course routes
-router.put("/EditCourse", Auth, IsInstructor, EditCourse)  ;                      //pending
+router.put("/EditCourse", Auth, IsInstructor, EditCourse)  ;                    //*****        pending           ***      
 // Delete a Course
 router.delete("/DeleteCourse", DeleteCourse); //  complete verfied  
 
@@ -31,7 +31,7 @@ router.post("/CreateSection",Auth,IsInstructor,CreateSection);   //completed
 // Update a Section
 router.post("/UpdateSection",Auth,IsInstructor,UpdateSection);    //completed
 // Delete a Section
-router.post("/DeleteSection/:SectionId",Auth,IsInstructor,DeleteSection);
+router.delete("/DeleteSection/:SectionId",Auth,IsInstructor,DeleteSection);   //completed
 
 // create a sub section to a Section
 router.post('/CreateSubsection',Auth,IsInstructor,CreateSubsection);
@@ -51,7 +51,7 @@ router.post("/GetCourseDetails",Auth,GetCourseDetails);
 // Category can Only be Created by Admin
 router.post("/createCategory", Auth, IsAdmin, CreateCategory);  //completed
 router.get("/GetAllCategory", GetAllCategory);                 //completed
-router.post("/CategoryPageDetailes", CategoryPageDetailes);                   //  verifyied
+router.post("/CategoryPageDetailes", CategoryPageDetailes);   //  verifyied
 
 
 //                           Rating and Review                               

@@ -17,9 +17,9 @@ exports.CreateSubsection= async (req,res)=>
         //create subsection
         //add subsection id into section 
         // return response
-        const {Description,TimeDuration,Title,SectionId}=req.body;
+        const {Description,Title,SectionId}=req.body;
         const {VideoFile}=req.files;
-        if(!Description||!TimeDuration||!Title||!SectionId)
+        if(!Description||!Title||!SectionId)
         {
             return res.status(401).json(
                 {
@@ -38,7 +38,7 @@ exports.CreateSubsection= async (req,res)=>
         const SubsectionDetails= await SubSection.create(
             {
                 Title,
-                TimeDuration,
+                TimeDuration:response.duration,
                 Description,
                 VideoUrl:response.secure_url,
             }
