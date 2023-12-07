@@ -4,7 +4,8 @@ const cloudinary = require('cloudinary').v2
 
 ImageUploadToCloudinary=async (file,folder,height,quality)=>
   {
-    console.log("file,folder,height,quality=> 5",file,folder,height,quality);
+   try {
+    console.log("file,folder,height,quality inside utility=>",file,folder,height,quality);
     const options = { folder }
     if (height) {
       options.height = height
@@ -17,6 +18,12 @@ ImageUploadToCloudinary=async (file,folder,height,quality)=>
        const response = await cloudinary.uploader.upload(file.tempFilePath,options);
           console.log("response=>",response);
           return response;
+    
+   } catch (error) {
+
+    return error;
+    
+   }
 
 }
 
