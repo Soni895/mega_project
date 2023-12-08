@@ -8,6 +8,7 @@ const { default: mongoose } = require("mongoose");
   exports.Createrating= async (req,res)=>
   {
     try {
+
         // get user id
         // fetch  data from req body
         // check is user is enroll or not
@@ -22,8 +23,7 @@ const { default: mongoose } = require("mongoose");
                                                   });
 
     if(!CourseDetailes)
-    {
-       
+    {  
                 return res.status(404).json(
                     {
                         status:"Unsuccessful",
