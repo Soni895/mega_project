@@ -129,8 +129,8 @@ exports.DeleteSection=async (req,res)=>
         //update course
         // return response
 
-        const {SectionId}=req.params;
-        const {CouresId}=req.body;
+        // const {}=req.params;
+        const {CouresId,SectionId}=req.body;
         console.log("SectionId=>",SectionId);
         console.log("CouresId=>",CouresId);
         if(!SectionId||!CouresId)
