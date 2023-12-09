@@ -408,20 +408,20 @@ exports.GetFullCourseDetails= async (req,res)=>
 
 exports.UpdateCourseProgress= async (req,res)=>
 {
-  const { courseId, subsectionId } = req.body
-  const userId = req.user.id
+  const { CourseId, SubsectionId } = req.body
+  const UserId = req.User.id
 
   try {
     // Check if the subsection is valid
-    const subsection = await SubSection.findById(subsectionId)
+    const subsection = await SubSection.findById(SubsectionId)
     if (!subsection) {
       return res.status(404).json({ error: "Invalid subsection" })
     }
 
     // Find the course progress document for the user and course
     let courseProgress = await CourseProgress.findOne({
-      courseID: courseId,
-      userId: userId,
+      courseID: CourseId,
+      userId: UserId,
     })
 
     if (!courseProgress) {
@@ -432,16 +432,16 @@ exports.UpdateCourseProgress= async (req,res)=>
       })
     } else {
       // If course progress exists, check if the subsection is already completed
-      if (courseProgress.completedVideos.includes(subsectionId)) {
+      if (courseProgress.CompletedVideo.includes(SubsectionId)) {
         return res.status(400).json({ error: "Subsection already completed" })
       }
 
       // Push the subsection into the completedVideos array
-      courseProgress.completedVideos.push(subsectionId)
+      courseProgress.CompletedVideos.push(SubsectionId)
     }
 
     // Save the updated course progress
-    await courseProgress.save()
+    await courseProgress.save();
 
     return res.status(200).json({ message: "Course progress updated" })
   } catch (error) {

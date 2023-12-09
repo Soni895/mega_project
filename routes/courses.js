@@ -48,12 +48,11 @@ router.post("/GetCourseDetails",Auth,GetCourseDetails);  // completed
 // Get all Courses Under a Specific Instructor  ....
 router.get("/GetInstructorCourses", Auth, IsInstructor,GetInstructorCourses)   //completed
 // Get Details for a Specific Courses
-router.post("/GetFullCourseDetails", Auth, GetFullCourseDetails)
+router.post("/GetFullCourseDetails", Auth, GetFullCourseDetails)     //completed
 // To Update Course Progress
-router.post("/UpdateCourseProgress", Auth, IsStudent, UpdateCourseProgress);
+router.post("/UpdateCourseProgress", Auth, IsStudent, UpdateCourseProgress);    //   //completed
 // To get Course Progress
 // router.post("/getProgressPercentage", auth, isStudent, getProgressPercentage)
-
 
 
 //                            Category routes (Only by Admin)
