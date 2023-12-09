@@ -5,6 +5,7 @@ const Section= require("../models/section");
 const SubSection=require("../models/SubSection")
 const ImageUploadToCloudinary = require("../utils/imageuploader");
 const { convertSecondsToDuration } = require("../utils/convertSecondsToDuration");
+const CourseProgress= require("../models/courseprogrss");
 // create Course
 // get all caurse
 
@@ -340,33 +341,33 @@ exports.GetFullCourseDetails= async (req,res)=>
     const courseDetails = await Course.findOne({
       _id: CourseId,
     })
-      .populate({
+      .populate([{
         path: "Instructor",
         populate: {
           path: "AdditionalDetails",
         },
-      })
+      }])
       .populate("Category")
-      .populate("ratingAndReviews")
+      .populate("RatingAndREview")
       .populate({
-        path: "courseContent",
+        path: "CourseContent",
         populate: {
-          path: "subSection",
+          path: "SubSection",
         },
       })
       .exec()
 
-    let courseProgressCount = await CourseProgress.findOne({
-      courseID: courseId,
-      userId: userId,
+    let CourseProgressCount = await CourseProgress.findOne({
+      CourseId: CourseId,
+      UserId: userId,
     })
 
-    console.log("courseProgressCount : ", courseProgressCount)
+    console.log("courseProgressCount : ", CourseProgressCount)
 
     if (!courseDetails) {
       return res.status(400).json({
         success: false,
-        message: `Could not find course with id: ${courseId}`,
+        message: `Could not find course with id: ${CourseId}`,
       })
     }
 
@@ -378,22 +379,22 @@ exports.GetFullCourseDetails= async (req,res)=>
     // }
 
     let totalDurationInSeconds = 0
-    courseDetails.courseContent.forEach((content) => {
-      content.subSection.forEach((subSection) => {
-        const timeDurationInSeconds = parseInt(subSection.timeDuration)
+    courseDetails.CourseContent.forEach((content) => {
+      content.SubSection.forEach((subSection) => {
+        const timeDurationInSeconds = parseInt(subSection.TimeDuration)
         totalDurationInSeconds += timeDurationInSeconds
       })
     })
 
-    const totalDuration = convertSecondsToDuration(totalDurationInSeconds)
+    const totalDuration = convertSecondsToDuration(totalDurationInSeconds);
 
     return res.status(200).json({
       success: true,
       data: {
         courseDetails,
         totalDuration,
-        completedVideos: courseProgressCount?.completedVideos
-          ? courseProgressCount?.completedVideos
+        completedVideos: CourseProgressCount?.CompletedVideo
+          ? CourseProgressCount?.CompletedVideo
           : [],
       },
     })
