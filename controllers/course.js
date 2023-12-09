@@ -293,6 +293,32 @@ exports.EditCourse= async (req,res)=>
   }
 }
 
+exports.GetInstructorCourses= async (req,res)=>
+{
+  try {
+    
+  } catch (error) {
+    
+  }
+}
+
+exports.GetFullCourseDetails= async (req,res)=>
+{
+  try {
+    
+  } catch (error) {
+    
+  }
+}
+
+exports.UpdateCourseProgress= async (req,res)=>
+{
+  try {
+    
+  } catch (error) {
+    
+  }
+}
 
 
 // Delete the Course

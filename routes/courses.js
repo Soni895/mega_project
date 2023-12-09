@@ -4,7 +4,7 @@ const router= express.Router();
 // Importing Middlewares
 const {Auth,IsInstructor, IsStudent, IsAdmin }=require("../middlewares/auth");
 // Course Controllers Import
-const {GetCourseDetails,GetAllCourses,CreateCourse,EditCourse,DeleteCourse}= require("../controllers/course");
+const {GetCourseDetails,GetAllCourses,CreateCourse,EditCourse,DeleteCourse,GetInstructorCourses,GetFullCourseDetails,UpdateCourseProgress}= require("../controllers/course");
 // Categories Controllers Import
 const{CategoryPageDetailes,GetAllCategory,CreateCategory}= require("../controllers/category");
 // Sections Controllers Import
@@ -44,6 +44,15 @@ router.post("/DeleteSubsection",Auth,IsInstructor,DeleteSubsection);  // complte
 router.get("/GetAllCourses",Auth,GetAllCourses);       //completed
 // Get Details for a Specific Courses
 router.post("/GetCourseDetails",Auth,GetCourseDetails);  // completed
+
+// Get all Courses Under a Specific Instructor  ....
+router.get("/GetInstructorCourses", Auth, IsInstructor,GetInstructorCourses)  
+// Get Details for a Specific Courses
+router.post("/GetFullCourseDetails", Auth, GetFullCourseDetails)
+// To Update Course Progress
+router.post("/UpdateCourseProgress", Auth, IsStudent, UpdateCourseProgress);
+// To get Course Progress
+// router.post("/getProgressPercentage", auth, isStudent, getProgressPercentage)
 
 
 
