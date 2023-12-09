@@ -225,23 +225,22 @@ exports.GetCourseDetails = async (req, res) => {
     console.log("CourseId=>", CourseId);
     // find course detailed
     const CourseDetailes = await Course.findById({ _id: CourseId })
-      .populate({
+    .populate({
       path: "Instructor",
-      populate:
-      {
-        path: 'AdditionalDetails' ,
-        path: 'Courses' ,
-       
-        populate:
-        {
-          path:"Category",
-          path:"CourseContent",
-        populate:{
-          path:"SubSection"
-        },
-        }}, 
-       
-      })
+      populate: [
+        { path: 'AdditionalDetails' },
+        { path: 'Courses', 
+          populate: [
+            { path: "Category" },
+            { path: "CourseContent", 
+              populate: [
+                { path: "SubSection" }
+              ]
+            }
+          ]
+        }
+      ]
+    })
       .populate({
         path: "CourseContent",
         populate: "SubSection",
@@ -336,18 +335,18 @@ exports.GetInstructorCourses= async (req,res)=>
 exports.GetFullCourseDetails= async (req,res)=>
 {
   try {
-    const { courseId } = req.body
-    const userId = req.user.id
+    const { CourseId } = req.body
+    const userId = req.User.id
     const courseDetails = await Course.findOne({
-      _id: courseId,
+      _id: CourseId,
     })
       .populate({
-        path: "instructor",
+        path: "Instructor",
         populate: {
-          path: "additionalDetails",
+          path: "AdditionalDetails",
         },
       })
-      .populate("category")
+      .populate("Category")
       .populate("ratingAndReviews")
       .populate({
         path: "courseContent",

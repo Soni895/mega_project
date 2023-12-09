@@ -46,7 +46,7 @@ router.get("/GetAllCourses",Auth,GetAllCourses);       //completed
 router.post("/GetCourseDetails",Auth,GetCourseDetails);  // completed
 
 // Get all Courses Under a Specific Instructor  ....
-router.get("/GetInstructorCourses", Auth, IsInstructor,GetInstructorCourses)  
+router.get("/GetInstructorCourses", Auth, IsInstructor,GetInstructorCourses)   //completed
 // Get Details for a Specific Courses
 router.post("/GetFullCourseDetails", Auth, GetFullCourseDetails)
 // To Update Course Progress
