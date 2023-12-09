@@ -8,7 +8,7 @@ const {InstructorDashboard}=require("../controllers/profile");   //completed
 // should be maked
  
 //                             Profile routes
-router.delete("/DeleteAccout",Auth, DeleteAccout);                           
+router.delete("/DeleteAccout",Auth, DeleteAccout);                    
 router.put("/UpdateProfile", Auth, UpdateProfile);
 router.get("/getallUserDetailes", Auth, GetallUserDetailes);   
 
