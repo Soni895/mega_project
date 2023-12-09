@@ -296,29 +296,198 @@ exports.EditCourse= async (req,res)=>
 exports.GetInstructorCourses= async (req,res)=>
 {
   try {
-    
+    // Get the instructor ID from the authenticated user or request body
+    const instructorId = req.user.id
+
+    // Find all courses belonging to the instructor
+    const instructorCourses = await Course.find({
+      instructor: instructorId,
+    }).sort({ createdAt: -1 })
+
+    // Return the instructor's courses
+    res.status(200).json({
+      success: true,
+      data: instructorCourses,
+    })
   } catch (error) {
-    
+    console.error(error)
+    res.status(500).json({
+      success: false,
+      message: "Failed to retrieve instructor courses",
+      error: error.message,
+    })
   }
 }
 
 exports.GetFullCourseDetails= async (req,res)=>
 {
   try {
-    
+    const { courseId } = req.body
+    const userId = req.user.id
+    const courseDetails = await Course.findOne({
+      _id: courseId,
+    })
+      .populate({
+        path: "instructor",
+        populate: {
+          path: "additionalDetails",
+        },
+      })
+      .populate("category")
+      .populate("ratingAndReviews")
+      .populate({
+        path: "courseContent",
+        populate: {
+          path: "subSection",
+        },
+      })
+      .exec()
+
+    let courseProgressCount = await CourseProgress.findOne({
+      courseID: courseId,
+      userId: userId,
+    })
+
+    console.log("courseProgressCount : ", courseProgressCount)
+
+    if (!courseDetails) {
+      return res.status(400).json({
+        success: false,
+        message: `Could not find course with id: ${courseId}`,
+      })
+    }
+
+    // if (courseDetails.status === "Draft") {
+    //   return res.status(403).json({
+    //     success: false,
+    //     message: `Accessing a draft course is forbidden`,
+    //   });
+    // }
+
+    let totalDurationInSeconds = 0
+    courseDetails.courseContent.forEach((content) => {
+      content.subSection.forEach((subSection) => {
+        const timeDurationInSeconds = parseInt(subSection.timeDuration)
+        totalDurationInSeconds += timeDurationInSeconds
+      })
+    })
+
+    const totalDuration = convertSecondsToDuration(totalDurationInSeconds)
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        courseDetails,
+        totalDuration,
+        completedVideos: courseProgressCount?.completedVideos
+          ? courseProgressCount?.completedVideos
+          : [],
+      },
+    })
   } catch (error) {
-    
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    })
   }
 }
 
 exports.UpdateCourseProgress= async (req,res)=>
 {
+  const { courseId, subsectionId } = req.body
+  const userId = req.user.id
+
   try {
-    
+    // Check if the subsection is valid
+    const subsection = await SubSection.findById(subsectionId)
+    if (!subsection) {
+      return res.status(404).json({ error: "Invalid subsection" })
+    }
+
+    // Find the course progress document for the user and course
+    let courseProgress = await CourseProgress.findOne({
+      courseID: courseId,
+      userId: userId,
+    })
+
+    if (!courseProgress) {
+      // If course progress doesn't exist, create a new one
+      return res.status(404).json({
+        success: false,
+        message: "Course progress Does Not Exist",
+      })
+    } else {
+      // If course progress exists, check if the subsection is already completed
+      if (courseProgress.completedVideos.includes(subsectionId)) {
+        return res.status(400).json({ error: "Subsection already completed" })
+      }
+
+      // Push the subsection into the completedVideos array
+      courseProgress.completedVideos.push(subsectionId)
+    }
+
+    // Save the updated course progress
+    await courseProgress.save()
+
+    return res.status(200).json({ message: "Course progress updated" })
   } catch (error) {
-    
+    console.error(error)
+    return res.status(500).json({ error: "Internal server error" })
   }
 }
+
+
+
+// exports.getProgressPercentage = async (req, res) => {
+//   const { courseId } = req.body
+//   const userId = req.user.id
+
+//   if (!courseId) {
+//     return res.status(400).json({ error: "Course ID not provided." })
+//   }
+
+//   try {
+//     // Find the course progress document for the user and course
+//     let courseProgress = await CourseProgress.findOne({
+//       courseID: courseId,
+//       userId: userId,
+//     })
+//       .populate({
+//         path: "courseID",
+//         populate: {
+//           path: "courseContent",
+//         },
+//       })
+//       .exec()
+
+//     if (!courseProgress) {
+//       return res
+//         .status(400)
+//         .json({ error: "Can not find Course Progress with these IDs." })
+//     }
+//     console.log(courseProgress, userId)
+//     let lectures = 0
+//     courseProgress.courseID.courseContent?.forEach((sec) => {
+//       lectures += sec.subSection.length || 0
+//     })
+
+//     let progressPercentage =
+//       (courseProgress.completedVideos.length / lectures) * 100
+
+//     // To make it up to 2 decimal point
+//     const multiplier = Math.pow(10, 2)
+//     progressPercentage =
+//       Math.round(progressPercentage * multiplier) / multiplier
+
+//     return res.status(200).json({
+//       data: progressPercentage,
+//       message: "Succesfully fetched Course progress",
+//     })
+//   } catch (error) {
+//     console.error(error)
+//     return res.status(500).json({ error: "Internal server error" })
+//   }
+// }
 
 
 // Delete the Course
