@@ -312,6 +312,9 @@ exports.GetInstructorCourses= async (req,res)=>
       Instructor: InstructorId,
     }).sort({ createdAt: -1 }).populate({
       path:"CourseContent",
+      populate:{
+        path:"SubSection"
+      }
     
     })
 
