@@ -19,8 +19,7 @@ const { default: mongoose } = require("mongoose");
         const UserId= req.User.id;
         const {rating,Review,CourseId}= req.body;
         const CourseDetailes= await Course.findOne({_id:CourseId,
-        StudentEnrolled:{$elemMatch:{$eq:UserId}}
-                                                  });
+        StudentEnrolled:{$elemMatch:{$eq:UserId}}  });
 
     if(!CourseDetailes)
     {  

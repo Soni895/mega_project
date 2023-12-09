@@ -295,9 +295,104 @@ exports.GetCourseDetails = async (req, res) => {
 exports.EditCourse= async (req,res)=>
 {
   try {
-    
+    const { CourseId } = req.body
+    const updates = req.body;
+    console.log(req.body);
+    console.log("update=>",updates);
+
+    const course = await Course.findById(CourseId)
+
+    if (!course) {
+      return res.status(404).json({ error: "Course not found" })
+    }
+
+    // If Thumbnail Image is found, update it
+    if (req.files) {
+      console.log("thumbnail update")
+      const Thumbmail = req.files.Thumbmail
+      const Response = await ImageUploadToCloudinary(
+        Thumbmail,
+        process.env.FOLDER_NAME
+      );
+      console.log(Response);
+      course.Thumbmail = Response.secure_url
+    }
+
+    // Update only the fields that are present in the request body
+    for (const key in updates) {
+      if (updates.hasOwnProperty(key)) {
+        if (key === "Tag" || key === "Instructions") {
+          course[key] = JSON.parse(updates[key])
+        } else {
+          course[key] = updates[key]
+        }
+      }
+    }
+
+    const Updated_Course= await course.save();
+    console.log("Updated_Course=>",Updated_Course);
+
+    const updatedCourse = await Course.findOne({
+      _id: CourseId,
+    })
+      .populate({
+        path: "Instructor",
+        populate: {
+          path: "AdditionalDetails",
+        },
+      })
+      .populate("Category")
+      .populate("RatingAndREview")
+      .populate({
+        path: "CourseContent",
+        populate: {
+          path: "SubSection",
+        },
+      })
+      .exec()
+      console.log("updatedCourse=>",updatedCourse);
+    res.json({
+      success: true,
+      message: "Course updated successfully",
+      data: updatedCourse,
+    })
   } catch (error) {
-    
+    console.error(error)
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    })
+  }
+}
+// Get Course List
+exports.getAllCourses = async (req, res) => {
+  try {
+    const allCourses = await Course.find(
+      { status: "Published" },
+      {
+        courseName: true,
+        price: true,
+        thumbnail: true,
+        instructor: true,
+        ratingAndReviews: true,
+        studentsEnrolled: true,
+      }
+    )
+      .populate("instructor")
+      .exec()
+
+    return res.status(200).json({
+      success: true,
+      data: allCourses,
+    })
+  } catch (error) {
+    console.log(error)
+    return res.status(404).json({
+      success: false,
+      message: `Can't Fetch Course Data`,
+      error: error.message,
+    })
   }
 }
 

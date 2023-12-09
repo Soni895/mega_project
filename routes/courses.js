@@ -63,9 +63,8 @@ router.post("/CategoryPageDetailes", CategoryPageDetailes);   //  verifyied
 
 
 //                           Rating and Review                               
-router.post("/createRating", Auth, IsStudent, Createrating)              //pending
-router.get("/getAverageRating", GetAverageRating)                        // pending
-router.get("/getReviews", GetAllRating);                              //pending
-
+router.post("/CreateRating", Auth, IsStudent, Createrating)              //pending
+router.get("/GetAverageRating", GetAverageRating)                        // pending
+router.get("/GetReviews", GetAllRating);                              //pending
 
 module.exports = router;
