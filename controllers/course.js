@@ -226,13 +226,21 @@ exports.GetCourseDetails = async (req, res) => {
     // find course detailed
     const CourseDetailes = await Course.findById({ _id: CourseId })
       .populate({
-       path: "Instructor",
+      path: "Instructor",
       populate:
       {
-         path: 'AdditionalDetails' ,
+        path: 'AdditionalDetails' ,
         path: 'Courses' ,
-        populate:"CourseContent"
-      }
+       
+        populate:
+        {
+          path:"Category",
+          path:"CourseContent",
+        populate:{
+          path:"SubSection"
+        },
+        }}, 
+       
       })
       .populate({
         path: "CourseContent",
@@ -297,12 +305,15 @@ exports.GetInstructorCourses= async (req,res)=>
 {
   try {
     // Get the instructor ID from the authenticated user or request body
-    const instructorId = req.user.id
+    const InstructorId = req.User.id;
 
     // Find all courses belonging to the instructor
     const instructorCourses = await Course.find({
-      instructor: instructorId,
-    }).sort({ createdAt: -1 })
+      Instructor: InstructorId,
+    }).sort({ createdAt: -1 }).populate({
+      path:"CourseContent",
+    
+    })
 
     // Return the instructor's courses
     res.status(200).json({
