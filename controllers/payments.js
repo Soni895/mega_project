@@ -195,7 +195,7 @@ const EnrollStudent= async(courses,userid,res)=>{
 
 }
 
-exports.VerifyPayment= async(req,res)=>
+exports.VerifySignature= async(req,res)=>
 {
     try {
 
