@@ -6,9 +6,9 @@ const {MailSender}=require("../utils/mailsender");
 const crypto = require('crypto');
 const {CourseEnrollmentEmail}= require("../Mail-Template/CourseEnrollmentEmail");
 const {PaymentSuccessEmail}= require("../Mail-Template/PaymentSuccessEmail");
-// // import template for email sender
-// // after integrate template
-// //   capture the payment and initiate therazor pay mdoel
+// import template for email sender
+// after integrate template
+//   capture the payment and initiate therazor pay mdoel
 
 exports.CapturePayment=async (req,res)=>{
     try {
@@ -218,6 +218,14 @@ const EnrollStudent= async(courses,userid,res)=>{
 
         const EmailResponse= await SendCourseMail(EnrolledStudent.Email,EnrolledCourse.CourseName,EnrolledStudent.FirstName+" "+EnrolledStudent.LastName);
       console.log("email send successful EmailResponse==>", EmailResponse);
+
+       return res.status(200).json(
+                {
+                    staus:true,
+                    success:true,
+                    message:"payment verified successfully"
+                }
+            )
         
        } catch (error) {
         
@@ -263,13 +271,7 @@ exports.VerifySignature= async(req,res)=>
 
             await EnrollStudent(courses,userid,res);
 
-            return res.status(200).json(
-                {
-                    staus:true,
-                    success:true,
-                    message:"payment verified successfully"
-                }
-            )
+    
         }
 
         return res.status(500).json(
