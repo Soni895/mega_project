@@ -155,7 +155,7 @@ exports.sendPaymentSuccessEmail = async (req, res) => {
     }
   
     try {
-      const EnrolledStudent = await User.findById(userId)
+      const EnrolledStudent = await User.findById(userId);
   
       await MailSender(
         EnrolledStudent.Email,
