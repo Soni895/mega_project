@@ -5,6 +5,7 @@ const User= require("../models/user");
 const {MailSender}=require("../utils/mailsender");
 const crypto = require('crypto');
 const {CourseEnrollmentEmail}= require("../Mail-Template/CourseEnrollmentEmail");
+const {PaymentSuccessEmail}= require("../Mail-Template/PaymentSuccessEmail");
 // // import template for email sender
 // // after integrate template
 // //   capture the payment and initiate therazor pay mdoel
@@ -138,6 +139,42 @@ async function SendCourseMail(Email,CourseName,Name)
         
     }
 };
+
+
+
+// Send Payment Success Email
+exports.sendPaymentSuccessEmail = async (req, res) => {
+    const { orderId, paymentId, amount } = req.body
+  
+    const userId = req.user.id
+  
+    if (!orderId || !paymentId || !amount || !userId) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Please provide all the details" })
+    }
+  
+    try {
+      const EnrolledStudent = await User.findById(userId)
+  
+      await MailSender(
+        EnrolledStudent.Email,
+        `Successful Payment`,
+        PaymentSuccessEmail(
+          `${EnrolledStudent.FirstName+" "+EnrolledStudent.LastName}`,
+          amount / 100,
+          orderId,
+          paymentId
+        )
+      )
+    } catch (error) {
+      console.log("error in sending mail", error)
+      return res
+        .status(400)
+        .json({ success: false, message: "Could not send email" })
+    }
+  }
+  
 
 const EnrollStudent= async(courses,userid,res)=>{
     if(!courses||!userid)
