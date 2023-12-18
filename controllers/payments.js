@@ -10,136 +10,6 @@ const {PaymentSuccessEmail}= require("../Mail-Template/PaymentSuccessEmail");
 // after integrate template
 //   capture the payment and initiate therazor pay mdoel
 
-exports.CapturePayment=async (req,res)=>{
-    try {
-
-        const {Courses}= req.body;
-        const UserId= req.User.id;
-
-        if(Courses.length===0)
-        {
-           return  res.status(500).json(
-                {
-                    status:false,
-                   message:"please provide Course Id"
-                }
-            )
-        }
-
-        let TotalAmount=0;
-
-        Courses.foreach(async(Course_Id)=>
-        {
-            let course;
-            try {
-                course = await Course.findById(Course_Id);
-
-                if(!course)
-                {
-                    return res.json(500).json(
-                        {
-                            status:false,
-                            message:"course not found"
-                        }
-                    )
-                }
-                const Uid= new mongoose.Types.ObjectId(UserId);
-
-                if(course.StudentEnrolled.includes(Uid))
-                {
-                    return res.json(500).json(
-                        {
-                            status:false,
-                            message:"student is already enrolled"
-                        }
-                    )
-                }
-
-
-                TotalAmount+=course?.Price;
-
-            } catch (error) {
-
-                return res.json(500).json(
-                    {
-                        status:false,
-                        message:"error in calculating Course Price"
-                    }
-                )
-                
-            }
-
-
-        });
-
-
- // order create
-
-const Currency="INR";
-
-const Option={
-    amount:TotalAmount*100,
-    currency:Currency,
-    receipt:Math.random(Date.now()).toString(),
-    notes:
-    {
-        Courses,
-        UserId,
-    }
-}
-
-// creatting order``
-try {
-
-const PaymentResponse= await instance.orders.create(Option);
-res.status(200).json({
-    success:true,
-    message:"payment response successful",
-    PaymentResponse,
-
-})
-
-    
-} catch (error) {
-    res.staus(500).json(
-        {
-            staus:false,
-            message:"unable to get payment response",
-            error,
-
-        }
-    )
-}
-
-        
-    } catch (error) {
-        res.staus(500).json(
-            {
-                staus:false,
-                message:"unable to Capture Payment ",
-                error,
-    
-            }
-        )
-        
-    }
-}
-
-async function SendCourseMail(Email,CourseName,Name)
-{
-    try {
-        const title= "Successful CourseEnrollment";
-     
-        const response= await MailSender(Email,title,CourseEnrollmentEmail(CourseName,Name));
-        console.log("response 133==>",response);
-           return response;
-    } catch (error) {
-        console.log("error while sending mail\n",error);
-        throw error;
-        
-    }
-};
-
 
 
 // Send Payment Success Email
@@ -175,6 +45,150 @@ exports.sendPaymentSuccessEmail = async (req, res) => {
     }
   }
   
+exports.CapturePayment=async (req,res)=>{
+    try {
+
+        const {Courses}= req.body;
+        const UserId= req.User.id;
+
+        console.log("courses and userId=>",Courses,UserId);
+
+        if(Courses.length===0)
+        {
+           return  res.status(500).json(
+                {
+                    status:false,
+                   message:"please provide Course Id"
+                }
+            )
+        }
+
+        let TotalAmount=0;
+
+        
+        Courses.forEach(async(Course_Id)=>
+        {
+
+            console.log(Course_Id);
+            let course;
+            try {
+                course = await Course.findById(Course_Id);
+                console.log("Course=>",course);
+
+                if(!course)
+                {
+                    return res.status(500).json(
+                        {
+                            status:false,
+                            message:"course not found"
+                        }
+                    )
+                }
+                const Uid= new mongoose.Types.ObjectId(UserId);
+                console.log("Uid id=>",Uid);
+
+                if(course.StudentEnrolled.includes(Uid))
+                {
+                    return res.status(500).json(
+                        {
+                            status:false,
+                            message:"student is already enrolled"
+                        }
+                    )
+                }
+
+
+                TotalAmount+=course?.Price;
+                console.log("TotalAmount=>",TotalAmount);
+
+            } catch (error) {
+
+                return res.status(500).json(
+                    {
+                        status:false,
+                        message:"error in calculating Course Price"
+                    }
+                )
+                
+            }
+
+
+        });
+
+
+ // order create
+
+const Currency="INR";
+
+const Option={
+    amount:TotalAmount*100,
+    currency:Currency,
+    receipt:Math.random(Date.now()).toString(),
+    notes:
+    {
+        Courses,
+        UserId,
+    }
+}
+
+// creatting order
+try {
+
+const PaymentResponse= await instance.orders.create(Option);
+
+console.log("paymentResposne=>",PaymentResponse);
+return res.status(200).json({
+    success:true,
+    message:"payment response successful",
+    PaymentResponse,
+
+})
+
+    
+} catch (error) {
+ return  res.staus(500).json(
+        {
+
+            staus:false,
+            message:"unable to get payment response",
+            error,
+
+        }
+    )
+}
+
+        
+    } catch (error) {
+
+       return  res.status(500).json(
+            {
+                staus:false,
+                message:"unable to Capture Payment ",
+                error,
+    
+            }
+        )
+        
+    }
+}
+
+async function SendCourseMail(Email,CourseName,Name)
+{
+    try {
+        const title= "Successful CourseEnrollment";
+     
+        const response= await MailSender(Email,title,CourseEnrollmentEmail(CourseName,Name));
+        console.log("response 133==>",response);
+           return response;
+    } catch (error) {
+        console.log("error while sending mail\n",error);
+        throw error;
+        
+    }
+};
+
+
+
 
 const EnrollStudent= async(courses,userid,res)=>{
     if(!courses||!userid)

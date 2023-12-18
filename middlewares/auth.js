@@ -7,6 +7,8 @@ require("dotenv").config();
 const jwt_secret = process.env.jwt_secret;
 exports.Auth = async (req, res, next) => {
   try {
+    console.log("hi inside Auth");
+
     // extract tooken
     const { Token } =
       req.body ||
