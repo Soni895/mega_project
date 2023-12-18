@@ -66,7 +66,7 @@ exports.CapturePayment=async (req,res)=>{
         let TotalAmount=0;
 
         
-        Courses.forEach(async(Course_Id)=>
+       for(const Course_Id of Courses )
         {
 
             console.log(Course_Id);
@@ -84,6 +84,7 @@ exports.CapturePayment=async (req,res)=>{
                         }
                     )
                 }
+
                 const Uid= new mongoose.Types.ObjectId(UserId);
                 console.log("Uid id=>",Uid);
 
@@ -112,8 +113,7 @@ exports.CapturePayment=async (req,res)=>{
                 
             }
 
-
-        });
+        }
 
 
  // order create
@@ -126,11 +126,11 @@ const Option={
     receipt:Math.random(Date.now()).toString(),
     notes:
     {
-        Courses,
+       
         UserId,
     }
 }
-
+console.log("Option=>",Option);
 // creatting order
 try {
 
