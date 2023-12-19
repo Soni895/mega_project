@@ -2,7 +2,7 @@ const { Mongoose, default: mongoose } = require("mongoose");
 const {instance}=require("../config/razorpay");
 const Course= require("../models/course");
 const User= require("../models/user");
-const {MailSender}=require("../utils/mailsender");
+const MailSender=require("../utils/mailsender");
 const crypto = require('crypto');
 const {CourseEnrollmentEmail}= require("../Mail-Template/CourseEnrollmentEmail");
 const {PaymentSuccessEmail}= require("../Mail-Template/PaymentSuccessEmail");
@@ -16,7 +16,8 @@ const {PaymentSuccessEmail}= require("../Mail-Template/PaymentSuccessEmail");
 exports.sendPaymentSuccessEmail = async (req, res) => {
     const { orderId, paymentId, amount } = req.body
   
-    const userId = req.user.id
+    const userId = req.User.id;
+    console.log( orderId, paymentId, amount);
   
     if (!orderId || !paymentId || !amount || !userId) {
       return res
@@ -27,16 +28,23 @@ exports.sendPaymentSuccessEmail = async (req, res) => {
     try {
       const EnrolledStudent = await User.findById(userId);
   
-      await MailSender(
+    const Mail_Respose= await MailSender(
         EnrolledStudent.Email,
-        `Successful Payment`,
+        `Payment Successful`,
         PaymentSuccessEmail(
           `${EnrolledStudent.FirstName+" "+EnrolledStudent.LastName}`,
           amount / 100,
           orderId,
           paymentId
         )
-      )
+      );
+
+      console.log("Mail_Respose=>",Mail_Respose);
+      return res.status(200).json({
+        status:true,
+        success:true,
+        Mail_Respose
+      })
     } catch (error) {
       console.log("error in sending mail", error)
       return res
@@ -112,13 +120,11 @@ exports.CapturePayment=async (req,res)=>{
                 )
                 
             }
+         }
+          // order create
 
-        }
-
-
- // order create
-
-const Currency="INR";
+       
+  const Currency="INR";
 
 const Option={
     amount:TotalAmount*100,
@@ -186,9 +192,6 @@ async function SendCourseMail(Email,CourseName,Name)
         
     }
 };
-
-
-
 
 const EnrollStudent= async(courses,userid,res)=>{
     if(!courses||!userid)
@@ -264,6 +267,9 @@ exports.VerifySignature= async(req,res)=>
 
         const courses= req.body.Courses;
         const userid= req.User.id;
+
+        console.log("razorpay_order_id,razorpay_payment_id,razorpay_signature,courses,userid=>",
+        razorpay_order_id,razorpay_payment_id,razorpay_signature,courses,userid)
 
         if(!razorpay_order_id ||!razorpay_payment_id||!razorpay_signature ||!courses||!userid)
         {
