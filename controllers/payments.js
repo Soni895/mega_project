@@ -106,7 +106,6 @@ exports.CapturePayment=async (req,res)=>{
                     )
                 }
 
-
                 TotalAmount+=course?.Price;
                 console.log("TotalAmount=>",TotalAmount);
 
@@ -181,7 +180,7 @@ return res.status(200).json({
 async function SendCourseMail(Email,CourseName,Name)
 {
     try {
-        const title= "Successful CourseEnrollment";
+        const title= "Course Enrollment Successful";
      
         const response= await MailSender(Email,title,CourseEnrollmentEmail(CourseName,Name));
         console.log("response 133==>",response);
@@ -193,20 +192,20 @@ async function SendCourseMail(Email,CourseName,Name)
     }
 };
 
-const EnrollStudent= async(courses,userid,res)=>{
-    if(!courses||!userid)
+const EnrollStudent= async(Courses,userid)=>{
+   try {
+    if(!Courses||!userid)
     {
-       return  res.status(400).json({
-            success:false,
-            message:'please provide complete detailes'
-        })
+       throw new Error(" student detailes required");
     }
+    console.log("courses,userid=>",Courses,userid)
 
-    for (const CourseId of courses)
+    for (const CourseId of Courses)
     {
        try {
 
-        const EnrolledCourse= await Course.findOneAndUpdate (CourseId,
+        console.log(CourseId);
+        const EnrolledCourse= await Course.findOneAndUpdate({_id:CourseId},
             {
                 $push: {
                     StudentEnrolled: userid,
@@ -216,43 +215,40 @@ const EnrollStudent= async(courses,userid,res)=>{
 
     if(!EnrolledCourse)
     {
-       return res.status(400).json({
-            success:false,
-            message:'Course not found'
-        })
+        throw new Error(" failed Course not found");
     }
 
     // find student and enroll into the course
 
-        const EnrolledStudent= await User.findByIdAndUpdate(userid,{
+        const EnrolledStudent= await User.findByIdAndUpdate({_id:userid},{
             $push:{
                 Courses:CourseId
             }
         },{new:true});
 
+        if(!EnrolledStudent)
+        {
+            throw new Error(" failed student enrollment");
+        }
+    
 
         // send the enroll student mail
 
-        const EmailResponse= await SendCourseMail(EnrolledStudent.Email,EnrolledCourse.CourseName,EnrolledStudent.FirstName+" "+EnrolledStudent.LastName);
+        console.log("updated student=>",EnrolledStudent);
+    const EmailResponse= await SendCourseMail(EnrolledStudent.Email,EnrolledCourse.CourseName,EnrolledStudent.FirstName+" "+EnrolledStudent.LastName);
       console.log("email send successful EmailResponse==>", EmailResponse);
-
-       return res.status(200).json(
-                {
-                    staus:true,
-                    success:true,
-                    message:"payment verified successfully"
-                }
-            )
         
        } catch (error) {
         
-        return res.status(400).json({
-            success:false,
-            message:'Course not found',
-            error,
-        })
+       console.log("error in stuent enrollment");
+       throw error;
        }
     }
+   } catch (error) {
+    console.log("error while verify pament with error =>\n",error);
+    throw error;
+    
+   }
 
 
 }
@@ -266,8 +262,7 @@ exports.VerifySignature= async(req,res)=>
         const razorpay_signature= req.body?.razorpay_signature;
 
         const courses= req.body.Courses;
-        const userid= req.User.id;
-
+        const userid= req.User.id;        
         console.log("razorpay_order_id,razorpay_payment_id,razorpay_signature,courses,userid=>",
         razorpay_order_id,razorpay_payment_id,razorpay_signature,courses,userid)
 
@@ -282,23 +277,31 @@ exports.VerifySignature= async(req,res)=>
         }
 
         let body=razorpay_order_id+"|"+razorpay_payment_id;
-        const expectedSignature= crypto.createHmac("sha256",Process.env.razorpay_key_secret)
-        .update(body.toString()).digest("hex");
-
+      const expectedSignature = crypto
+       . createHmac("sha256",process.env.razorpay_key_secret)
+        .update(body.toString())
+        .digest("hex");
+    
+           console.log(body);
+        console.log(expectedSignature);
+       
         if(expectedSignature===razorpay_signature)
         {
-            // student need to be enrolled
 
-            await EnrollStudent(courses,userid,res);
+            console.log("expectedSignature,razorpay_signature=>",expectedSignature,razorpay_signature);
+            console.log("signature verified");
+            console.log("wait for student enrollment");
+            // student need to be enrolled
+            await EnrollStudent(courses,userid);
 
     
         }
 
-        return res.status(500).json(
+        return res.status(200).json(
             {
-                staus:false,
-                success:false,
-                message:"payment verified failed"
+                staus:true,
+                success:true,
+                message:"payment verified success"
             }
         )
  
