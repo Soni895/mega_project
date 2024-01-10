@@ -8,4 +8,3 @@ exports.instance = new Razorpay({
     key_id,
     key_secret:  razorpay_key_secret,
   });
-
