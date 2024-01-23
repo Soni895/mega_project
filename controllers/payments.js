@@ -8,10 +8,7 @@ const {CourseEnrollmentEmail}= require("../Mail-Template/CourseEnrollmentEmail")
 const {PaymentSuccessEmail}= require("../Mail-Template/PaymentSuccessEmail");
 // import template for email sender
 // after integrate template
-//   capture the payment and initiate therazor pay mdoel
-
-
-
+// capture the payment and initiate therazor pay mdoel    
 // Send Payment Success Email
 exports.sendPaymentSuccessEmail = async (req, res) => {
     const { orderId, paymentId, amount } = req.body
@@ -25,7 +22,7 @@ exports.sendPaymentSuccessEmail = async (req, res) => {
         .json({ success: false, message: "Please provide all the details" })
     }
   
-    try {
+    try {   
       const EnrolledStudent = await User.findById(userId);
   
     const Mail_Respose= await MailSender(
